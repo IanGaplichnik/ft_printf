@@ -1,0 +1,88 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_str.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: igaplich <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/04 12:51:37 by igaplich          #+#    #+#             */
+/*   Updated: 2022/05/04 12:51:38 by igaplich         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/ft_printf.h"
+
+void	print_wid(t_parse *parse, char *string, int len)
+{
+	list_alloc(NULL, parse, parse->width);
+	if (!parse->dash)
+	{
+		if (parse->zero)
+			ft_memset(parse->cur->data, '0', parse->width - len);
+		else
+			ft_memset(parse->cur->data, ' ', parse->width - len);
+	}
+	ft_strncat(parse->cur->data, string, len);
+	if (parse->dash)
+		ft_memset(&parse->cur->data[len], ' ', parse->width - len);
+}
+
+int	print_str(t_parse *parse)
+{
+	char	*string;
+	int		len;
+
+	string = va_arg(parse->ap, char *);
+	if (!string)
+		string = "(null)";
+	len = ft_strlen(string);
+	if (parse->precision != -1 && parse->precision < len)
+		len = parse->precision;
+	if ((!parse->width || (parse->width && parse->width < len)) && len)
+		list_alloc(string, parse, len);
+	if (parse->width && len < parse->width)
+		print_wid(parse, string, len);
+	if (len || parse->width)
+		parse->cur->ret = ft_strlen(parse->cur->data);
+	return (0);
+}
+
+int	print_c(t_parse *parse)
+{
+	char	conv;
+
+	conv = va_arg(parse->ap, int);
+	if (parse->width && parse->width > 1)
+		print_wid(parse, &conv, 1);
+	else
+	 	list_alloc(&conv, parse, 1);
+		// write(1, &conv, 1);
+	parse->cur->ret = ft_strlen(parse->cur->data);
+	return (0);
+}
+
+int	print_perc(t_parse *parse)
+{
+	char	conv;
+
+	conv = parse->conv;
+	if (parse->width && parse->width > 1)
+		print_wid(parse, &conv, 1);
+	else
+		list_alloc(&conv, parse, 1);
+	parse->cur->ret = ft_strlen(parse->cur->data);
+	return (0);
+}
+
+int	print_conversion(t_parse *parse)
+{
+	// printf("string at print = %s\n", *str);
+	if (parse->conv == 's')
+		print_str(parse);
+	if (parse->conv == 'c')
+		print_c(parse);
+	if (parse->conv == '%')
+		print_perc(parse);
+	parse_init(parse);
+	return (0);
+}
