@@ -8,13 +8,11 @@ int main(void)
 	// ret_or = printf("Helo %.2s after\n", "Input");
 	// ret = ft_printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	// ret_or = printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
-	
-	ret = ft_printf("  %5%");
-	
+	ret = 8;
+	ret = ft_printf("%-5c", NULL);
 	// ft_printf("%%", "test");
 	// ft_printf("%   %", "test");
 	// ret_or = printf("%05% text\n");
-	// printf("Ret = %d\n", ret);
 	// printf("Ret_or = %d\n", ret_or);
 	return (0);
 }

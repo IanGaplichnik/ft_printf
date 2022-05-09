@@ -49,8 +49,7 @@ int	ft_atoi_base(const char *str, int str_base)
 	}
 	while (base(str[i], str_base) != -1)
 	{
-		nb = nb * str_base;
-		nb = nb + base(str[i], str_base);
+		nb = nb * str_base + base(str[i], str_base);
 		i++;
 	}
 	return (nb * sign);

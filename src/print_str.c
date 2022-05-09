@@ -27,18 +27,15 @@ void	print_wid(t_parse *parse, char *string, int len)
 		ft_memset(&parse->cur->data[len], ' ', parse->width - len);
 }
 
-int	print_str(t_parse *parse)
+int	precision_check(t_parse *parse, char *string)
 {
-	char	*string;
-	int		len;
+	int	len;
 
-	string = va_arg(parse->ap, char *);
-	if (!string)
-		string = "(null)";
+	
 	len = ft_strlen(string);
 	if (parse->precision != -1 && parse->precision < len)
 		len = parse->precision;
-	if ((!parse->width || (parse->width && parse->width < len)) && len)
+	if ((!parse->width || (parse->width && parse->width <= len)) && len)
 		list_alloc(string, parse, len);
 	if (parse->width && len < parse->width)
 		print_wid(parse, string, len);
@@ -51,13 +48,19 @@ int	print_c(t_parse *parse)
 {
 	char	conv;
 
-	conv = va_arg(parse->ap, int);
+	conv = (char)va_arg(parse->ap, int);
 	if (parse->width && parse->width > 1)
 		print_wid(parse, &conv, 1);
 	else
 	 	list_alloc(&conv, parse, 1);
-		// write(1, &conv, 1);
 	parse->cur->ret = ft_strlen(parse->cur->data);
+	if (conv == 0)
+	{
+		if (parse->width > 1)
+			parse->cur->ret = parse->width;
+		else
+			parse->cur->ret = 1;
+	}
 	return (0);
 }
 
@@ -65,13 +68,40 @@ int	print_perc(t_parse *parse)
 {
 	char	conv;
 
-	conv = parse->conv;
+	conv = '%';
 	if (parse->width && parse->width > 1)
 		print_wid(parse, &conv, 1);
 	else
 		list_alloc(&conv, parse, 1);
 	parse->cur->ret = ft_strlen(parse->cur->data);
 	return (0);
+}
+
+int	print_str(t_parse *parse)
+{
+	char	*string;
+	int		len;
+
+	string = va_arg(parse->ap, char *);
+	if (!string)
+		string = "(null)";
+	precision_check(parse, string);
+}
+
+int	print_p(t_parse *parse)
+{
+	char	*addr;
+	char	*tmp;
+	long	p;
+	int		len;
+
+	p = (long)va_arg(parse->ap, void *);
+	addr = ft_itoa_base(p, 16);
+	tmp = addr;
+	addr = ft_strjoin("0x", addr);
+	free(tmp);
+	precision_check(parse, addr);
+	free(addr);
 }
 
 int	print_conversion(t_parse *parse)
@@ -83,6 +113,8 @@ int	print_conversion(t_parse *parse)
 		print_c(parse);
 	if (parse->conv == '%')
 		print_perc(parse);
+	if (parse->conv == 'p')
+		print_p(parse);
 	parse_init(parse);
 	return (0);
 }

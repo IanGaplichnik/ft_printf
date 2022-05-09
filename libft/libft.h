@@ -91,4 +91,5 @@ int		ft_lstlen(t_list **alst);
 t_list	*ft_lstmerge(t_list **dst, t_list **src);
 int		ft_atoi_base(const char *str, int str_base);
 int		get_next_line(const int fd, char **line);
+char	*ft_itoa_base(long num, int base);
 #endif

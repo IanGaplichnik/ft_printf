@@ -27,11 +27,23 @@ t_parse	*parse_init(t_parse *parse)
 	return (parse);
 }
 
-void	list_alloc(char *str, t_parse *parse, int i)
+void	list_fill(char *str, t_parse *parse, int len)
+{
+	parse->cur->data = ft_strnew(len + 1);
+	if (str != NULL)
+	{
+		ft_strncpy(parse->cur->data, str, len);
+		parse->cur->ret = ft_strlen(parse->cur->data);
+	}
+	else
+		ft_memset(parse->cur->data, '\0', len + 1);
+}
+
+void	list_alloc(char *str, t_parse *parse, int len)
 {
 	t_ret	*new;
 
-	if (i == 0)
+	if (len == 0)
 		return ;
 	new = (t_ret *)malloc(sizeof(t_ret));
 	new->next = NULL;
@@ -48,14 +60,7 @@ void	list_alloc(char *str, t_parse *parse, int i)
 		parse->cur->next = new;
 		parse->cur = parse->cur->next;
 	}
-	parse->cur->data = ft_strnew(i + 1);
-	if (str != NULL)
-	{
-		ft_strncpy(parse->cur->data, str, i);
-		parse->cur->ret = ft_strlen(parse->cur->data);
-	}
-	else
-		ft_memset(parse->cur->data, '\0', i + 1);
+	list_fill(str, parse, len);
 }
 
 int	print_reverse(t_parse *parse)
@@ -97,8 +102,11 @@ int	print_test(t_parse *parse)
 	{
 		ret += tmp->ret;
 		write(1, tmp->data, tmp->ret);
+		free(tmp->data);
+		free(tmp);
 		tmp = tmp->next;
 	}
+	free(parse);
 	return (ret);
 }
 

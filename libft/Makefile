@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -c -I ${INC_DIR}
+FLAGS = -c -I ${INC_DIR} #-Wall -Werror -Wextra 
 
 NAME = libft.a
 
@@ -81,7 +81,8 @@ SRC = ft_strlen.c \
 	ft_lstlen.c \
 	ft_lstmerge.c \
 	ft_atoi_base.c \
-	get_next_line.c
+	get_next_line.c \
+	ft_itoa_base.c
 
 all: $(NAME)
 

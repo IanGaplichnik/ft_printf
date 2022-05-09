@@ -82,7 +82,10 @@ void	widprec_parse(char **str, t_parse *parse, int *param)
 	if (**str == '.')
 	{
 		*str += 1;
-		widprec_parse(str, parse, &parse->precision);
+		if (**str >= '0' && **str <= '9')
+			widprec_parse(str, parse, &parse->precision);
+		else
+			parse->precision = 0;
 	}
 }
 
