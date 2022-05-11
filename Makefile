@@ -6,7 +6,8 @@ FLAGS=#-Wall -Werror -Wextra
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	percent_parse.c \
-	print_str.c
+	print_str.c \
+	print_d.c
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 
 OBJ_PATH=./obj/

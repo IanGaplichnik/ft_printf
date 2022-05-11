@@ -54,4 +54,6 @@ int		percent_parse(char **str, t_parse *parse);
 void	print_struct(t_parse *parse, char *state);
 void	list_alloc(char *str, t_parse *parse, int i);
 t_parse	*parse_init(t_parse *parse);
+void	print_d(t_parse *parse);
+
 #endif

@@ -31,7 +31,6 @@ int	precision_check(t_parse *parse, char *string)
 {
 	int	len;
 
-	
 	len = ft_strlen(string);
 	if (parse->precision != -1 && parse->precision < len)
 		len = parse->precision;
@@ -52,7 +51,7 @@ int	print_c(t_parse *parse)
 	if (parse->width && parse->width > 1)
 		print_wid(parse, &conv, 1);
 	else
-	 	list_alloc(&conv, parse, 1);
+		list_alloc(&conv, parse, 1);
 	parse->cur->ret = ft_strlen(parse->cur->data);
 	if (conv == 0)
 	{
@@ -77,7 +76,7 @@ int	print_perc(t_parse *parse)
 	return (0);
 }
 
-int	print_str(t_parse *parse)
+void	print_str(t_parse *parse)
 {
 	char	*string;
 	int		len;
@@ -88,7 +87,7 @@ int	print_str(t_parse *parse)
 	precision_check(parse, string);
 }
 
-int	print_p(t_parse *parse)
+void	print_p(t_parse *parse)
 {
 	char	*addr;
 	char	*tmp;
@@ -115,6 +114,8 @@ int	print_conversion(t_parse *parse)
 		print_perc(parse);
 	if (parse->conv == 'p')
 		print_p(parse);
+	if (parse->conv == 'd' || parse->conv == 'i')
+		print_d(parse);
 	parse_init(parse);
 	return (0);
 }
