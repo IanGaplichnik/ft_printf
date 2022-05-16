@@ -14,27 +14,17 @@
 
 void	print_d(t_parse *parse)
 {
-	void	*num;
+	uintmax_t	num;
 	short x;
+	char *res;
 
 	if (parse->length == 1)
-	{
-		num = (signed char *)malloc(sizeof(signed char));
-		*(signed char *)num = va_arg(parse->ap, int);
-	}
+		num = (signed char)va_arg(parse->ap, int);
 	if (parse->length == 2)
-	{
-		num = (short *)malloc(sizeof(short));
-		*(short *)num = va_arg(parse->ap, int);
-	}
+		num = (short *)va_arg(parse->ap, int);
 	if (parse->length == 3 || parse->length == 5)
-	{
-		num = (long long *)malloc(sizeof(long long));
-		*(long long *)num = va_arg(parse->ap, long long);
-	}
+		num = (long long *)va_arg(parse->ap, long long);
 	if (parse->length == 4)
-	{
-		num = (long *)malloc(sizeof(long));
-		*(long *)num = va_arg(parse->ap, long);
-	}
+		num = (long *)va_arg(parse->ap, long);
+	// res = uitoa(num);
 }

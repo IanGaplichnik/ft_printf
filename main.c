@@ -9,8 +9,8 @@ int main(void)
 	// ret = ft_printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	// ret_or = printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	ret = 8;
-	ret = ft_printf("%hd", '*');
-	printf("%hhd\n", '*');
+	ret = ft_printf("%05s", "Hello");
+	// printf("%hhd\n", '*');
 	// ft_printf("%%", "test");
 	// ft_printf("%   %", "test");
 	// ret_or = printf("%05% text\n");

@@ -125,7 +125,7 @@ int	percent_parse(char **str, t_parse *parse)
 	widprec_parse(str, parse, &parse->width);
 	length_parse(str, parse);
 	conv_parse(str, parse);
-	// print_struct(parse, "");
+	print_struct(parse, "");
 	ret += print_conversion(parse);
 	return (ret);
 }
