@@ -12,24 +12,6 @@
 
 #include "libft.h"
 
-static size_t	num_len(long num, int base)
-{
-	size_t	len;
-
-	len = 1;
-	if (len < 0)
-	{
-		len++;
-		num = -num;
-	}
-	while (num >= base)
-	{
-		num /= base;
-		len++;
-	}
-	return (len);
-}
-
 static char	*conv(char *res, long num, int base, int len)
 {
 	len -= 1;
@@ -50,17 +32,26 @@ static char	*conv(char *res, long num, int base, int len)
 	return (res);
 }
 
-char	*ft_itoa_base(long num, int base)
+char	*ft_itoa_base(long long num, int base, int cap)
 {
 	size_t	len;
 	char	*res;
+	int		i;
 
+	i = -1;
+	if (num == (-9223372036854775807LL - 1))
+		return (res = ft_strdup("-9223372036854775808"));
 	if (num == -1 && base == 16)
 		return (res = ft_strdup("ffffffffffffffff"));
 	if (base > 36 || base < 2)
 		return (NULL);
-	len = num_len(num, base);
+	len = ft_numlenbase(num, base);
 	res = ft_strnew(len);
 	res = conv(res, num, base, len);
+	if (cap)
+	{
+		while (res[++i])
+			res[i] = ft_toupper(res[i]);
+	}
 	return (res);
 }

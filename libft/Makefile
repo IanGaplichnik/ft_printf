@@ -82,7 +82,8 @@ SRC = ft_strlen.c \
 	ft_lstmerge.c \
 	ft_atoi_base.c \
 	get_next_line.c \
-	ft_itoa_base.c
+	ft_itoa_base.c \
+	ft_numlenbase.c
 
 all: $(NAME)
 

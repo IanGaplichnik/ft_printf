@@ -79,7 +79,6 @@ int	print_perc(t_parse *parse)
 void	print_str(t_parse *parse)
 {
 	char	*string;
-	int		len;
 
 	string = va_arg(parse->ap, char *);
 	if (!string)
@@ -92,10 +91,9 @@ void	print_p(t_parse *parse)
 	char	*addr;
 	char	*tmp;
 	long	p;
-	int		len;
 
 	p = (long)va_arg(parse->ap, void *);
-	addr = ft_itoa_base(p, 16);
+	addr = ft_itoa_base(p, 16, 0);
 	tmp = addr;
 	addr = ft_strjoin("0x", addr);
 	free(tmp);
@@ -114,8 +112,9 @@ int	print_conversion(t_parse *parse)
 		print_perc(parse);
 	if (parse->conv == 'p')
 		print_p(parse);
-	if (parse->conv == 'd' || parse->conv == 'i')
-		print_d(parse);
+	if (parse->conv == 'd' || parse->conv == 'i' || parse->conv == 'o' ||
+		parse->conv == 'x' || parse->conv == 'X' || parse->conv == 'u')
+		print_nums(parse);
 	parse_init(parse);
 	return (0);
 }

@@ -24,6 +24,8 @@ t_parse	*parse_init(t_parse *parse)
 	parse->precision = -1;
 	parse->length = 0;
 	parse->conv = 0;
+	parse->base = 10;
+	parse->neg = 0;
 	return (parse);
 }
 
@@ -35,8 +37,9 @@ void	list_fill(char *str, t_parse *parse, int len)
 		ft_strncpy(parse->cur->data, str, len);
 		parse->cur->ret = ft_strlen(parse->cur->data);
 	}
-	else
-		ft_memset(parse->cur->data, '\0', len + 1);
+	// else
+	// 	parse->cur->data[len] = '\0';
+		// ft_memset(parse->cur->data, '\0', len + 1);
 }
 
 void	list_alloc(char *str, t_parse *parse, int len)

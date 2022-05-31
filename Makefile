@@ -2,12 +2,13 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=#-Wall -Werror -Wextra
+FLAGS=#-Wall -Werror -Wextra -Wimplicit
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	percent_parse.c \
 	print_str.c \
-	print_d.c
+	print_d.c \
+	num_conversion.c
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 
 OBJ_PATH=./obj/
@@ -84,16 +85,17 @@ LIB_SRC_FILES=ft_strlen.c \
 	ft_lstmerge.c \
 	ft_atoi_base.c \
 	get_next_line.c \
-	ft_itoa_base.c
+	ft_itoa_base.c \
+	ft_numlenbase.c
 
 INCLUDES=-I./includes -I./libft
 HEADERS_PATH=./includes/
 HEADERS_FILES=ft_printf.h
 HEADERS=$(addprefix $(HEADERS_PATH), $(HEADERS_FILES))
 
-all: $(NAME)
+all: $(NAME) 
 
-$(NAME): $(OBJ) $(LIB_OBJ) $(HEADERS)
+$(NAME): $(OBJ) $(LIB_OBJ) $(HEADERS) 
 	@ar rc $(NAME) $(OBJ) $(LIB_OBJ)
 	@ranlib $(NAME)
 	@gcc $(FLAGS) main.c -L. libftprintf.a
@@ -114,6 +116,6 @@ fclean: clean
 	@make -C ./libft fclean
 	@rm -f $(NAME)
 
-re: fclean all
+re: fclean all clean all
 
 .PHONY: clean fclean re all

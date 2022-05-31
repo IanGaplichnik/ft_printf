@@ -8,8 +8,10 @@ int main(void)
 	// ret_or = printf("Helo %.2s after\n", "Input");
 	// ret = ft_printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	// ret_or = printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
-	ret = 8;
-	ret = ft_printf("%05s", "Hello");
+	ret = ft_printf("%.10d\n", 4242);
+	printf("ret = %d\n\n", ret);
+	ret = printf("%.10d\n", 4242);
+	printf("ret = %d\n\n", ret);
 	// printf("%hhd\n", '*');
 	// ft_printf("%%", "test");
 	// ft_printf("%   %", "test");
@@ -17,24 +19,3 @@ int main(void)
 	// printf("Ret_or = %d\n", ret_or);
 	return (0);
 }
-
-/*
-
-if precision > len(str)
-	len(str) = len(str)
-if precision < len(str)
-	len = precision
-
-if !width
-	write (len(str))
-
-if width
-		if len(str) < width
-			if !dash
-				write (len(str)) && write (width - len(str) ' ')
-			if dash
-				write (width - len(str)' ' ) && write (precision)
-		if len(str) > width
-			write (len(str))
-
-			*/
