@@ -8,9 +8,10 @@ int main(void)
 	// ret_or = printf("Helo %.2s after\n", "Input");
 	// ret = ft_printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	// ret_or = printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
-	ret = ft_printf("%.10d\n", 4242);
+
+	ret = ft_printf("@moulitest: %.d %.0d", 0, 0);
 	printf("ret = %d\n\n", ret);
-	ret = printf("%.10d\n", 4242);
+	ret = printf("@moulitest: %.d %.0d", 0, 0);
 	printf("ret = %d\n\n", ret);
 	// printf("%hhd\n", '*');
 	// ft_printf("%%", "test");

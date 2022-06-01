@@ -16,7 +16,6 @@
 void	print_di(t_parse *parse, char *num)
 {
 	int		str_len;
-	int		alloc_len;
 	int		num_len;
 	int		i;
 	char	*tmp;
@@ -27,11 +26,13 @@ void	print_di(t_parse *parse, char *num)
 		tmp = num;
 		num = ft_strnew(parse->precision);
 		ft_memset(num, '0', parse->precision - num_len);
-		ft_strncpy(&num[parse->precision - num_len], tmp, num_len);
+		ft_strcpy(&num[parse->precision - num_len], tmp);
 		free(tmp);
-		num_len = ft_strlen(num);
+		num_len = parse->precision;
 	}
-	if (parse->neg && !parse->zero)
+	if (parse->precision != -1)
+		parse->zero = 0;
+	if ((parse->neg && !parse->zero) || ((parse->plus || parse->space) && parse->precision != -1))
 		num_len += 1;
 	str_len = num_len;
 	if (str_len < parse->width)
@@ -43,21 +44,16 @@ void	print_di(t_parse *parse, char *num)
 	if (num_len < parse->width && !parse->dash && parse->width)
 	{
 		if (parse->zero)
-		{
 			ft_memset(&parse->cur->data[i], '0', str_len - num_len);
-			i += str_len - num_len;
-		}
 		if (!parse->zero)
-		{
 			ft_memset(&parse->cur->data[i], ' ', str_len - num_len);
-			i += str_len - num_len;
-		}
+		i += str_len - num_len;
 		if (parse->neg && parse->zero)
 			parse->cur->data[0] = '-';
-		if (parse->plus && !parse->neg)
+		if (parse->plus && !parse->neg && parse->precision == -1)
 			parse->cur->data[0] = '+';
 	}
-	else if (num_len > parse->width)
+	if (num_len > parse->width || parse->precision != -1)
 	{
 		if (parse->plus && !parse->neg)
 			parse->cur->data[i++] = '+';
@@ -66,12 +62,15 @@ void	print_di(t_parse *parse, char *num)
 	}
 	if (parse->neg && !ft_strchr(parse->cur->data, '-'))
 		parse->cur->data[i++] = '-';
-	ft_strncpy(&parse->cur->data[i], num, num_len);
-	if (num_len < parse->width)
+	if (parse->precision == 0 && *num == '0')
 	{
-		i = ft_strlen(parse->cur->data);
-		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
+		free(num);
+		num = ft_strdup("");
 	}
+	ft_strcpy(&parse->cur->data[i], num);
+	i = ft_strlen(parse->cur->data);
+	if (num_len < parse->width && i < str_len)
+		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
 	parse->cur->ret = ft_strlen(parse->cur->data);
 	free(num);
 }

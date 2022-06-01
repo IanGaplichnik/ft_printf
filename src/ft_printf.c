@@ -106,9 +106,9 @@ int	print_test(t_parse *parse)
 		ret += tmp->ret;
 		write(1, tmp->data, tmp->ret);
 		free(tmp->data);
-		free(tmp);
 		tmp = tmp->next;
 	}
+	free(tmp);
 	free(parse);
 	return (ret);
 }

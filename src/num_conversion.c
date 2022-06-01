@@ -62,7 +62,7 @@ char	*num_to_string(t_parse *parse, intmax_t num)
 
 void	print_specifier(t_parse *parse, char *num)
 {
-	if (parse->conv == 'd' || parse->conv == 'i')
+	if (parse->conv == 'd' || parse->conv == 'i' || parse->conv == 'o' || parse->conv == 'u')
 		print_di(parse, num);
 }
 
