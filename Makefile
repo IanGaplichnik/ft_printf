@@ -2,7 +2,7 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=-g -Wall -Werror -Wextra -Wimplicit -fsanitize=address
+FLAGS=-g #-Wall -Werror -Wextra -Wimplicit #-fsanitize=address
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	percent_parse.c \

@@ -50,10 +50,10 @@ void	print_di(t_parse *parse, char *num)
 		i += str_len - num_len;
 		if (parse->neg && parse->zero)
 			parse->cur->data[0] = '-';
-		if (parse->plus && !parse->neg && parse->precision == -1)
+		if (parse->plus && !parse->neg && parse->precision == -1 && parse->zero)
 			parse->cur->data[0] = '+';
 	}
-	if (num_len > parse->width || parse->precision != -1)
+	if (num_len > parse->width || parse->precision != -1 || (num_len < parse->width && !parse->zero))
 	{
 		if (parse->plus && !parse->neg)
 			parse->cur->data[i++] = '+';

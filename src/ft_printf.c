@@ -119,6 +119,8 @@ int	ft_printf(const char *format, ...)
 	t_parse	*parse;
 	int		i;
 
+	// if (!format)
+	// 	return (-1);
 	i = 0;
 	str = (char *)format;
 	parse = (t_parse *)malloc(sizeof(t_parse));
