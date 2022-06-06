@@ -13,14 +13,17 @@
 #include "../includes/ft_printf.h"
 #include <limits.h>
 
-void	print_di(t_parse *parse, char *num)
+void print_di(t_parse *parse, char *num)
 {
-	int		str_len;
-	int		num_len;
-	int		i;
-	char	*tmp;
+	int str_len;
+	int num_len;
+	int i;
+	char *tmp;
 
-	num_len = ft_strlen(num);
+	if (!ft_strcmp(num, "0") && parse->precision == 0)
+		num_len = 0;
+	else
+		num_len = ft_strlen(num);
 	if (parse->precision != -1 && parse->precision > num_len)
 	{
 		tmp = num;
@@ -32,34 +35,32 @@ void	print_di(t_parse *parse, char *num)
 	}
 	if (parse->precision != -1)
 		parse->zero = 0;
-	if ((parse->neg && !parse->zero) || ((parse->plus || parse->space) && parse->precision != -1))
+	if ((parse->neg || parse->plus) && !parse->zero)
+		num_len += 1;
+	if (!parse->neg && !parse->plus && parse->space)
 		num_len += 1;
 	str_len = num_len;
 	if (str_len < parse->width)
 		str_len = parse->width;
 	if (str_len < parse->precision)
 		str_len = parse->precision;
+	if (str_len == 0)
+		return;
 	list_alloc(NULL, parse, str_len);
 	i = 0;
-	if (num_len < parse->width && !parse->dash && parse->width)
+	if (parse->space && !parse->neg && !parse->plus)
+		parse->cur->data[i++] = ' ';
+	if (num_len < parse->width && !parse->dash)
 	{
 		if (parse->zero)
 			ft_memset(&parse->cur->data[i], '0', str_len - num_len);
 		if (!parse->zero)
 			ft_memset(&parse->cur->data[i], ' ', str_len - num_len);
 		i += str_len - num_len;
-		if (parse->neg && parse->zero)
-			parse->cur->data[0] = '-';
-		if (parse->plus && !parse->neg && parse->precision == -1 && parse->zero)
-			parse->cur->data[0] = '+';
+		
 	}
-	if (num_len > parse->width || parse->precision != -1 || (num_len < parse->width && !parse->zero))
-	{
-		if (parse->plus && !parse->neg)
-			parse->cur->data[i++] = '+';
-		if (parse->space && !parse->neg)
-			parse->cur->data[i++] = ' ';
-	}
+	if (parse->plus && !parse->neg && !parse->zero)
+		parse->cur->data[i++] = '+';
 	if (parse->neg && !ft_strchr(parse->cur->data, '-'))
 		parse->cur->data[i++] = '-';
 	if (parse->precision == 0 && *num == '0')

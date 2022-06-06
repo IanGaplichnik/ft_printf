@@ -129,7 +129,7 @@ int	ft_printf(const char *format, ...)
 	va_start(parse->ap, format);
 	while (str[i] != '\0')
 	{
-		if (str[i] == '%' && str[1])
+		if (str[i] == '%' && str[i + 1] != '\0')
 		{
 			list_alloc(str, parse, i);
 			str += i;
@@ -141,6 +141,6 @@ int	ft_printf(const char *format, ...)
 	}
 	list_alloc(str, parse, i);
 	va_end(parse->ap);
-	return(print_test(parse));
-	// return (print_reverse(parse));
+	// return(print_test(parse));
+	return (print_reverse(parse));
 }
