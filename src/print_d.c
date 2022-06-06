@@ -20,8 +20,12 @@ void print_di(t_parse *parse, char *num)
 	int i;
 	char *tmp;
 
-	if (!ft_strcmp(num, "0") && parse->precision == 0)
+	if (*num == '0' && parse->precision == 0)
+	{
+		free(num);
+		num = ft_strdup("");
 		num_len = 0;
+	}
 	else
 		num_len = ft_strlen(num);
 	if (parse->precision != -1 && parse->precision > num_len)
@@ -37,7 +41,7 @@ void print_di(t_parse *parse, char *num)
 		parse->zero = 0;
 	if ((parse->neg || parse->plus) && !parse->zero)
 		num_len += 1;
-	if (!parse->neg && !parse->plus && parse->space)
+	if (!parse->neg && parse->space)
 		num_len += 1;
 	str_len = num_len;
 	if (str_len < parse->width)
@@ -48,7 +52,7 @@ void print_di(t_parse *parse, char *num)
 		return;
 	list_alloc(NULL, parse, str_len);
 	i = 0;
-	if (parse->space && !parse->neg && !parse->plus)
+	if (parse->space && !parse->neg)
 		parse->cur->data[i++] = ' ';
 	if (num_len < parse->width && !parse->dash)
 	{
@@ -58,23 +62,25 @@ void print_di(t_parse *parse, char *num)
 			ft_memset(&parse->cur->data[i], ' ', str_len - num_len);
 		i += str_len - num_len;
 		if (parse->neg && parse->zero)
+		{
 			parse->cur->data[0] = '-';
-		if (parse->plus && !parse->neg && parse->precision == -1 && parse->zero)
+			parse->neg = 0;
+		}
+		if (parse->plus && !parse->neg && parse->zero)
 			parse->cur->data[0] = '+';
 	}
 	if (parse->plus && !parse->neg && !parse->zero)
 		parse->cur->data[i++] = '+';
-	if (parse->neg && !ft_strchr(parse->cur->data, '-'))
+	if (parse->neg)
 		parse->cur->data[i++] = '-';
-	if (parse->precision == 0 && *num == '0')
-	{
-		free(num);
-		num = ft_strdup("");
-	}
+		
 	ft_strcpy(&parse->cur->data[i], num);
-	i = ft_strlen(parse->cur->data);
+	i += ft_strlen(num);
 	if (num_len < parse->width && i < str_len)
+	{
 		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
-	parse->cur->ret = ft_strlen(parse->cur->data);
+		i = parse->width;
+	}
+	parse->cur->ret = i; 
 	free(num);
 }
