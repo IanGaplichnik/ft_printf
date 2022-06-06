@@ -141,6 +141,6 @@ int	ft_printf(const char *format, ...)
 	}
 	list_alloc(str, parse, i);
 	va_end(parse->ap);
-	// return(print_test(parse));
-	return (print_reverse(parse));
+	return(print_test(parse));
+	// return (print_reverse(parse));
 }

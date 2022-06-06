@@ -57,7 +57,10 @@ void print_di(t_parse *parse, char *num)
 		if (!parse->zero)
 			ft_memset(&parse->cur->data[i], ' ', str_len - num_len);
 		i += str_len - num_len;
-		
+		if (parse->neg && parse->zero)
+			parse->cur->data[0] = '-';
+		if (parse->plus && !parse->neg && parse->precision == -1 && parse->zero)
+			parse->cur->data[0] = '+';
 	}
 	if (parse->plus && !parse->neg && !parse->zero)
 		parse->cur->data[i++] = '+';
