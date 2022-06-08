@@ -44,8 +44,8 @@ typedef struct s_parse
 	int		precision;		//.num
 	int		length;			//hh, h, ll, l, L
 	char	conv;			//%cspdiouxX
-	int		base;
 	int		neg;
+	char	*num;
 	struct s_ret	*head;	//head of linked list
 	struct s_ret	*cur;	//current node of linked list
 }	t_parse;
@@ -58,6 +58,6 @@ void	list_alloc(char *str, t_parse *parse, int i);
 t_parse	*parse_init(t_parse *parse);
 void	print_nums(t_parse *parse);
 int		precision_check(t_parse *parse, char *string);
-void	print_di(t_parse *parse, char *num);
+void	print_di(t_parse *parse);
 
 #endif

@@ -95,25 +95,28 @@ void	length_parse(char **str, t_parse *parse)
 		parse->length = 1;
 	else if (**str == 'h')
 		parse->length = 2;
-	if (!ft_strncmp(*str, "ll", 2))
+	else if (!ft_strncmp(*str, "ll", 2))
 		parse->length = 3;
 	else if (**str == 'l')
 		parse->length = 4;
-	if (**str == 'L')
+	else if (**str == 'L')
 		parse->length = 5;
-	if (parse->length == 1 || parse->length == 3)
+	if ((parse->length == 1 || parse->length == 3) && str[0][1] && str[0][2])
 		*str += 2;
-	if (parse->length == 2 || parse->length == 4 || parse->length == 5)
+	else if ((parse->length == 2 || parse->length == 4 || parse->length == 5) && str[0][1])
 		*str += 1;
 }
 
-void	conv_parse(char **str, t_parse *parse)
+int	conv_parse(char **str, t_parse *parse)
 {
 	if (ft_strchr(CONV, **str))
 	{
 		parse->conv = **str;
 		*str += 1;
+		return (1);
 	}
+	*str += 1;
+	return (0);
 }
 
 int	percent_parse(char **str, t_parse *parse)
@@ -124,7 +127,8 @@ int	percent_parse(char **str, t_parse *parse)
 	flag_parse(str, parse);
 	widprec_parse(str, parse, &parse->width);
 	length_parse(str, parse);
-	conv_parse(str, parse);
+	if (conv_parse(str, parse) == 0)
+		return (0);
 	// print_struct(parse, "");
 	ret += print_conversion(parse);
 	return (ret);

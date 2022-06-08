@@ -24,8 +24,8 @@ t_parse	*parse_init(t_parse *parse)
 	parse->precision = -1;
 	parse->length = 0;
 	parse->conv = 0;
-	parse->base = 10;
 	parse->neg = 0;
+	parse->num = NULL;
 	return (parse);
 }
 
@@ -37,9 +37,6 @@ void	list_fill(char *str, t_parse *parse, int len)
 		ft_strncpy(parse->cur->data, str, len);
 		parse->cur->ret = ft_strlen(parse->cur->data);
 	}
-	// else
-	// 	parse->cur->data[len] = '\0';
-		// ft_memset(parse->cur->data, '\0', len + 1);
 }
 
 void	list_alloc(char *str, t_parse *parse, int len)
@@ -98,15 +95,19 @@ int	print_test(t_parse *parse)
 {
 	int		ret;
 	t_ret	*tmp;
+	t_ret	*tmp2;
 
 	ret = 0;
 	tmp = parse->head;
+	tmp2 = parse->head;
 	while (tmp)
 	{
 		ret += tmp->ret;
 		write(1, tmp->data, tmp->ret);
 		free(tmp->data);
 		tmp = tmp->next;
+		free(tmp2);
+		tmp2 = tmp;
 	}
 	free(tmp);
 	free(parse);
@@ -119,8 +120,8 @@ int	ft_printf(const char *format, ...)
 	t_parse	*parse;
 	int		i;
 
-	// if (!format)
-	// 	return (-1);
+	if (!format)
+		return (-1);
 	i = 0;
 	str = (char *)format;
 	parse = (t_parse *)malloc(sizeof(t_parse));
