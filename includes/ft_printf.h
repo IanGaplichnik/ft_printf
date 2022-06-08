@@ -59,5 +59,6 @@ t_parse	*parse_init(t_parse *parse);
 void	print_nums(t_parse *parse);
 int		precision_check(t_parse *parse, char *string);
 void	print_di(t_parse *parse);
+void	print_oux(t_parse *parse);
 
 #endif

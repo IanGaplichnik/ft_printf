@@ -9,9 +9,9 @@ int main(void)
 	// ret = ft_printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 	// ret_or = printf("%s %s %s %s string. gg!", "this", "is", "a", "multi", "string");
 
-	ret = ft_printf("%#2.7x", 3267);
+	ret = ft_printf("%#05x", 43);
 	printf("ret = %d\n\n", ret);
-	ret = printf("%#2.7x", 3267);
+	ret = printf("%#05x", 43);
 	printf("ret = %d\n\n", ret);
 	// printf("%hhd\n", '*');
 	// ft_printf("%%", "test");

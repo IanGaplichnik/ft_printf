@@ -2,13 +2,15 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=-g #-Wall -Werror -Wextra -Wimplicit #-fsanitize=address
+FLAGS=-g #-fsanitize=address #-Wall -Werror -Wextra -Wimplicit
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	percent_parse.c \
 	print_str.c \
 	print_d.c \
-	num_conversion.c
+	num_conversion.c \
+	print_oux.c
+
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 
 OBJ_PATH=./obj/

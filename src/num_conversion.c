@@ -61,9 +61,11 @@ char	*num_to_string(t_parse *parse, intmax_t num, int base)
 
 void	print_specifier(t_parse *parse)
 {
-	if (parse->conv == 'd' || parse->conv == 'i' || parse->conv == 'o' ||
-		parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
+	if (parse->conv == 'd' || parse->conv == 'i') 
 		print_di(parse);
+	else if (parse->conv == 'o' ||
+		parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
+		print_oux(parse);
 }
 
 void print_nums(t_parse *parse)
