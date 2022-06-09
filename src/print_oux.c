@@ -13,9 +13,9 @@
 #include "../includes/ft_printf.h"
 #include <limits.h>
 
-void	num_no_width_oux(t_parse *parse, int *i, int *hex_flag, int *num_len)
+void	num_no_width_oux(t_parse *parse, int *i, int *num_len)
 {
-	if (parse->hash && *hex_flag)
+	if (parse->hash)
 	{
 		parse->cur->data[(*i)++] = '0';
 		if (parse->conv == 'X')
@@ -25,9 +25,9 @@ void	num_no_width_oux(t_parse *parse, int *i, int *hex_flag, int *num_len)
 	}
 }
 
-void	num_width_oux(t_parse *parse, int *num_len, int *i, int *str_len, int *hex_flag)
+void	num_width_oux(t_parse *parse, int *num_len, int *i, int *str_len)
 {
-	if (parse->hash && *hex_flag && parse->precision != -1)
+	if (parse->hash && parse->precision != -1)
 		*num_len += 2;
 	if (*num_len < parse->width && !parse->dash)
 	{
@@ -35,20 +35,18 @@ void	num_width_oux(t_parse *parse, int *num_len, int *i, int *str_len, int *hex_
 			ft_memset(&parse->cur->data[*i], '0', *str_len - *num_len);
 		else if (!parse->zero)
 			ft_memset(&parse->cur->data[*i], ' ', *str_len - *num_len);
-		if (parse->hash && parse->conv == 'X' && parse->zero && *hex_flag)
+		if (parse->hash && parse->conv == 'X' && parse->zero)
 			ft_memset(&parse->cur->data[1], 'X', 1);
-		else if (parse->hash && parse->conv == 'x' && parse->zero && *hex_flag)
+		else if (parse->hash && parse->conv == 'x' && parse->zero)
 			ft_memset(&parse->cur->data[1], 'x', 1);
 		*i += *str_len - *num_len;
 	}
 }
 
-void	lengths_prepare_oux(int *num_len, int *str_len, t_parse *parse, int *hex_flag)
+void	lengths_prepare_oux(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
 		parse->zero = 0;
-	if ((parse->neg || parse->plus) && !parse->zero)
-		*num_len += 1;
 	if (!parse->neg && parse->space)
 		*num_len += 1;
 	*str_len = *num_len;
@@ -58,12 +56,12 @@ void	lengths_prepare_oux(int *num_len, int *str_len, t_parse *parse, int *hex_fl
 		*str_len = parse->precision;
 }
 
-void	precision_add_oux(t_parse *parse, int *num_len, int hex_flag)
+void	precision_add_oux(t_parse *parse, int *num_len)
 {
 	char	*tmp;
 	int		i;
 
-	if (parse->hash && parse->precision > *num_len)
+	if (parse->precision > *num_len)
 	{
 		i = 0;
 		tmp = parse->num;
@@ -81,11 +79,9 @@ void	print_oux(t_parse *parse)
 	int		str_len;
 	int		num_len;
 	int		i;
-	int		hex_flag;
 
-	hex_flag = 1;
 	if (*parse->num == '0')
-		hex_flag = 0;
+		parse->hash = 0;
 	if (*parse->num == '0' && parse->precision == 0)
 	{
 		free(parse->num);
@@ -94,14 +90,14 @@ void	print_oux(t_parse *parse)
 	}
 	else
 		num_len = ft_strlen(parse->num);
-	precision_add_oux(parse, &num_len, hex_flag);
-	lengths_prepare_oux(&num_len, &str_len, parse, &hex_flag);
+	precision_add_oux(parse, &num_len);
+	lengths_prepare_oux(&num_len, &str_len, parse);
 	if (str_len == 0)
 		return ;
 	list_alloc(NULL, parse, str_len);
 	i = 0;
-	num_width_oux(parse, &num_len, &i, &str_len, &hex_flag);
-	num_no_width_oux(parse, &i, &hex_flag, &num_len);
+	num_width_oux(parse, &num_len, &i, &str_len);
+	num_no_width_oux(parse, &i, &num_len);
 	ft_strcpy(&parse->cur->data[i], parse->num);
 	i += ft_strlen(parse->num);
 	if (num_len < parse->width && i < str_len)
