@@ -98,7 +98,7 @@ void	print_di(t_parse *parse)
 	num_no_width(parse, &i);
 	ft_strcpy(&parse->cur->data[i], parse->num);
 	i += ft_strlen(parse->num);
-	if (num_len < parse->width && i < str_len)
+	if (i < str_len)
 	{
 		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
 		i = parse->width;

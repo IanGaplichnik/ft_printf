@@ -15,7 +15,7 @@
 
 void	num_no_width_oux(t_parse *parse, int *i, int *num_len)
 {
-	if (parse->hash && !parse->zero)
+	if (parse->hash && (!parse->zero || (parse->zero && parse->width && (parse->width < *num_len))))
 	{
 		parse->cur->data[(*i)++] = '0';
 		if (parse->conv == 'X')
@@ -28,8 +28,11 @@ void	num_no_width_oux(t_parse *parse, int *i, int *num_len)
 void	num_width_oux(t_parse *parse, int *num_len, int *i, int *str_len)
 {
 	
-	if (*num_len < parse->width && !parse->dash)
+	if (((*num_len < parse->width && !parse->hash) || ((*num_len + 2) < parse->width && parse->hash))
+		&& !parse->dash)
 	{
+		if (parse->hash && !parse->zero)
+			*num_len += 2;
 		if (parse->zero)
 			ft_memset(&parse->cur->data[*i], '0', *str_len - *num_len);
 		else if (!parse->zero)
@@ -38,9 +41,8 @@ void	num_width_oux(t_parse *parse, int *num_len, int *i, int *str_len)
 			ft_memset(&parse->cur->data[1], 'X', 1);
 		else if (parse->hash && parse->conv == 'x' && parse->zero)
 			ft_memset(&parse->cur->data[1], 'x', 1);
-		if (parse->hash)
-			*num_len += 2;
-		*i += *str_len - *num_len;
+		*num_len = ft_strlen(parse->cur->data);
+		*i = *num_len;
 	}
 }
 
@@ -48,8 +50,6 @@ void	lengths_prepare_oux(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
 		parse->zero = 0;
-	if (!parse->neg && parse->space)
-		*num_len += 1;
 	*str_len = *num_len;
 	if (*str_len < parse->width)
 		*str_len = parse->width;
@@ -101,7 +101,7 @@ void	print_oux(t_parse *parse)
 	num_no_width_oux(parse, &i, &num_len);
 	ft_strcpy(&parse->cur->data[i], parse->num);
 	i += ft_strlen(parse->num);
-	if (num_len < parse->width && i < str_len)
+	if (i < str_len)
 	{
 		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
 		i = parse->width;
