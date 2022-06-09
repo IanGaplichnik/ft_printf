@@ -100,8 +100,8 @@ void	print_di(t_parse *parse)
 	i += ft_strlen(parse->num);
 	if (i < str_len)
 	{
-		ft_memset(&parse->cur->data[i], ' ', parse->width - i);
-		i = parse->width;
+		ft_memset(&parse->cur->data[i], ' ', str_len - i);
+		i = str_len;
 	}
 	parse->cur->ret = i;
 	free(parse->num);
