@@ -57,24 +57,6 @@ void	lengths_prepare_oux(int *num_len, int *str_len, t_parse *parse)
 		*str_len = parse->precision;
 }
 
-void	precision_add_oux(t_parse *parse, int *num_len)
-{
-	char	*tmp;
-	int		i;
-
-	if (parse->precision > *num_len)
-	{
-		i = 0;
-		tmp = parse->num;
-		parse->num = ft_strnew(parse->precision);
-		if (parse->precision != -1 && parse->precision > *num_len)
-			ft_memset(&parse->num[i], '0', parse->precision - *num_len);
-		ft_strcpy(&parse->num[parse->precision - *num_len], tmp);
-		free(tmp);
-		*num_len = parse->precision;
-	}
-}
-
 void	print_oux(t_parse *parse)
 {
 	int		str_len;
@@ -84,14 +66,14 @@ void	print_oux(t_parse *parse)
 	num_len = ft_strlen(parse->num);
 	if (*parse->num == '0')
 		parse->hash = 0;
-	if (*parse->num == '0' && parse->precision == 0)
+	if (*parse->num == '0' && parse->precision == 0 && parse->conv != 'o')
 	{
 		free(parse->num);
 		parse->num = ft_strdup("");
 		num_len = 0;
 	}
 	lengths_prepare_oux(&num_len, &str_len, parse);
-	precision_add_oux(parse, &num_len);
+	precision_add(parse, &num_len);
 	if (str_len == 0)
 		return ;
 	list_alloc(NULL, parse, str_len);

@@ -61,7 +61,7 @@ void	precision_add(t_parse *parse, int *num_len)
 	int		i;
 
 	i = 0;
-	if (parse->precision != -1 && parse->precision > *num_len)
+	if (parse->precision > *num_len)
 	{
 		tmp = parse->num;
 		parse->num = ft_strnew(parse->precision);
