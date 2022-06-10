@@ -42,7 +42,7 @@ void	num_width(t_parse *parse, int *num_len, int *i, int *str_len)
 
 void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
 {
-	if (parse->precision != -1)
+	if (parse->precision != -1 || *num_len > parse->width)
 		parse->zero = 0;
 	if ((parse->neg || parse->plus) && !parse->zero)
 		*num_len += 1;
