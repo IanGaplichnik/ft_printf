@@ -25,15 +25,15 @@ void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 {
 	if (len == 0 && (conv != 'u' && conv != 'x' && conv != 'X'))
 		*num = (int)va_arg(ap, long long);
-	if (len == 0 && (conv == 'u' || conv == 'x' || conv == 'X'))
+	else if (len == 0 && (conv == 'u' || conv == 'x' || conv == 'X'))
 		*num = (unsigned int)va_arg(ap, long long);
-	if (len == 1)
+	else if (len == 1)
 		*num = (char)va_arg(ap, long long);
-	if (len == 2)
+	else if (len == 2)
 		*num = (short)va_arg(ap, long long);
-	if (len == 3 || len == 5)
+	else if (len == 3 || len == 5)
 		*num = (long long)va_arg(ap, long long);
-	if (len == 4)
+	else if (len == 4)
 		*num = (long)va_arg(ap, long long);
 }
 
@@ -64,9 +64,11 @@ void	print_specifier(t_parse *parse)
 	if (parse->conv == 'd' || parse->conv == 'i') 
 		print_di(parse);
 	else if (parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
-		print_uxX(parse);
+		print_ux(parse);
 	else if (parse->conv == 'o')
 		print_o(parse);
+	else if (parse->conv == 'f')
+		print_f(parse);
 }
 
 void print_nums(t_parse *parse)

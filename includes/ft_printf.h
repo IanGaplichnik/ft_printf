@@ -13,7 +13,7 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# define CONV "%cspdiouxX"
+# define CONV "%cspfdiouxX"
 # define FLAGS "#-0+ "
 # include "../libft/libft.h"
 # include <stdarg.h>
@@ -59,8 +59,9 @@ t_parse	*parse_init(t_parse *parse);
 void	print_nums(t_parse *parse);
 int		precision_check(t_parse *parse, char *string);
 void	print_di(t_parse *parse);
-void	print_uxX(t_parse *parse);
+void	print_ux(t_parse *parse);
 void	print_o(t_parse *parse);
+void	print_f(t_parse *parse);
 void	precision_add(t_parse *parse, int *num_len);
 void	lengths_prepare(int *num_len, int *str_len, t_parse *parse);
 

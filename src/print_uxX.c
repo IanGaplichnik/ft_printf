@@ -12,7 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
-void	num_width_uxX(t_parse *parse, int *num_len, int *i, int *str_len)
+void	num_width_ux(t_parse *parse, int *num_len, int *i, int *str_len)
 {
 	
 	if (((*num_len < parse->width && !parse->hash)
@@ -36,7 +36,7 @@ void	num_width_uxX(t_parse *parse, int *num_len, int *i, int *str_len)
 	}
 }
 
-void	lengths_prepare_uxX(int *num_len, int *str_len, t_parse *parse)
+void	lengths_prepare_ux(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
 		parse->zero = 0;
@@ -47,7 +47,7 @@ void	lengths_prepare_uxX(int *num_len, int *str_len, t_parse *parse)
 		*str_len = parse->precision;
 }
 
-void	print_uxX(t_parse *parse)
+void	print_ux(t_parse *parse)
 {
 	int		str_len;
 	int		num_len;
@@ -62,13 +62,13 @@ void	print_uxX(t_parse *parse)
 		parse->num = ft_strdup("");
 		num_len = 0;
 	}
-	lengths_prepare_uxX(&num_len, &str_len, parse);
+	lengths_prepare_ux(&num_len, &str_len, parse);
 	precision_add(parse, &num_len);
 	if (str_len == 0)
 		return ;
 	list_alloc(NULL, parse, str_len);
 	i = 0;
-	num_width_uxX(parse, &num_len, &i, &str_len);
+	num_width_ux(parse, &num_len, &i, &str_len);
 	ft_strcpy(&parse->cur->data[i], parse->num);
 	i += ft_strlen(parse->num);
 	if (i < str_len)
