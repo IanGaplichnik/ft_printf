@@ -63,9 +63,10 @@ void	print_specifier(t_parse *parse)
 {
 	if (parse->conv == 'd' || parse->conv == 'i') 
 		print_di(parse);
-	else if (parse->conv == 'o' ||
-		parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
-		print_oux(parse);
+	else if (parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
+		print_uxX(parse);
+	else if (parse->conv == 'o')
+		print_o(parse);
 }
 
 void print_nums(t_parse *parse)
