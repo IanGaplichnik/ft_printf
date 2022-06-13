@@ -23,14 +23,18 @@ int	base_selector(const char c)
 
 void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 {
-	if (len == 0 && (conv != 'u' && conv != 'x' && conv != 'X'))
+	if (len == 0 && (conv == 'd' || conv == 'i'))
 		*num = (int)va_arg(ap, long long);
-	else if (len == 0 && (conv == 'u' || conv == 'x' || conv == 'X'))
+	else if (len == 0)
 		*num = (unsigned int)va_arg(ap, long long);
-	else if (len == 1)
+	else if (len == 1 && (conv == 'd' || conv == 'i'))
 		*num = (char)va_arg(ap, long long);
-	else if (len == 2)
+	else if (len == 1)
+		*num = (unsigned char)va_arg(ap, long long);
+	else if (len == 2 && (conv == 'd' || conv == 'i'))
 		*num = (short)va_arg(ap, long long);
+	else if (len == 2)
+		*num = (unsigned short)va_arg(ap, long long);
 	else if (len == 3 || len == 5)
 		*num = (long long)va_arg(ap, long long);
 	else if (len == 4)
@@ -67,8 +71,7 @@ void	print_specifier(t_parse *parse)
 		print_ux(parse);
 	else if (parse->conv == 'o')
 		print_o(parse);
-	else if (parse->conv == 'f')
-		print_f(parse);
+	
 }
 
 void print_nums(t_parse *parse)

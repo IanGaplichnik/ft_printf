@@ -13,20 +13,6 @@
 #include "../includes/ft_printf.h"
 #include <stdio.h>
 
-void	print_struct(t_parse *parse, char *state)
-{
-	printf("\n\n%s\n", state);
-	printf("# = %s\n", parse->hash ? "true" : "false");
-	printf("- = %s\n", parse->dash ? "true" : "false");
-	printf("0 = %s\n", parse->zero ? "true" : "false");
-	printf("+ = %s\n", parse->plus ? "true" : "false");
-	printf("' ' = %s \n", parse->space ? "true" : "false");
-	printf("Width = %d\n", parse->width);
-	printf("Prec = %d\n", parse->precision);
-	printf("Len = %d\n", parse->length);
-	printf("Conv = %c\n", parse->conv);
-}
-
 void	flag_mark(char flag, t_parse *parse)
 {
 	if (flag == '#')

@@ -103,7 +103,6 @@ void	print_p(t_parse *parse)
 
 int	print_conversion(t_parse *parse)
 {
-	// printf("string at print = %s\n", *str);
 	if (parse->conv == 's')
 		print_str(parse);
 	else if (parse->conv == 'c')
@@ -112,9 +111,9 @@ int	print_conversion(t_parse *parse)
 		print_perc(parse);
 	else if (parse->conv == 'p')
 		print_p(parse);
-	else if (parse->conv == 'd' || parse->conv == 'i' || parse->conv == 'o'
-		|| parse->conv == 'x' || parse->conv == 'X' || parse->conv == 'u'
-		|| parse->conv == 'f')
+	else if (parse->conv == 'f')
+		print_f(parse);
+	else
 		print_nums(parse);
 	parse_init(parse);
 	return (0);
