@@ -27,7 +27,7 @@ void	precision_round(t_parse *parse, char **fraction)
 		if ((*fraction)[i - 1] && (*fraction)[i - 1] != '9')
 		{
 			old = (*fraction)[i - 1];
-			((*fraction)[i - 1] += 1);
+			(*fraction)[i - 1] += 1;
 		}
 		i--;
 	}
@@ -37,6 +37,7 @@ void	precision_add_f(t_parse *parse, char **fraction)
 {
 	char	*tmp;
 	int		left;
+	char	old;
 
 	left = 18 - ft_strlen(*fraction);
 	if (left > 0)
@@ -52,16 +53,44 @@ void	precision_add_f(t_parse *parse, char **fraction)
 	{
 		if ((*fraction)[parse->precision] == '9')
 			precision_round(parse, fraction);
-		else
+		else if ((*fraction)[parse->precision - 1] != '9')
 			(*fraction)[parse->precision - 1] += 1;
+		else
+		{
+			(*fraction)[parse->precision] = '9';
+			precision_round(parse, fraction);
+		}
 	}
 	(*fraction)[parse->precision] = '\0';
 }
 
+void	precision_zero(t_parse *parse, char **fraction, char **intpart)
+{
+	char	old;
+	int		i;
+
+	i = ft_strlen(*intpart) - 1;
+	old = '9';
+	if ((*fraction)[0] >= '5')
+	{
+		old = (*intpart)[i];
+		(*intpart)[i] += 1;
+		while (old == '9' && (*intpart)[i] == '9' && i >= 0)
+			{
+				(*intpart)[i] = '0';
+				if ((*intpart)[i - 1] && (*intpart)[i - 1] != '9')
+				{
+					old = (*intpart)[i - 1];
+					(*intpart)[i - 1] += 1;
+				}
+			}
+			i--;
+	}
+}
 
 void	print_f(t_parse *parse)
 {
-	long double	full;
+	double	full;
 	char		*intpart;
 	char		*fraction;
 	char		*tmp;
@@ -72,14 +101,11 @@ void	print_f(t_parse *parse)
 		full = -full;
 		parse->neg = 1;
 	}
-	if (full == -0)
-		parse->neg = 1;
 	intpart = ft_itoa_base((int)full, 10, 0);
 	fraction = ft_itoa_base((long long)((full - (int)full) * pow(10, 18)),
 			10, 0);
 	if (parse->precision == -1)
 		parse->precision = 6;
-	precision_add_f(parse, &fraction);
 	if (parse->neg)
 	{
 		tmp = intpart;
@@ -88,6 +114,7 @@ void	print_f(t_parse *parse)
 	}
 	if (parse->precision != 0)
 	{
+		precision_add_f(parse, &fraction);
 		tmp = parse->num;
 		parse->num = ft_strjoin(intpart, ".");
 		free(tmp);
@@ -96,12 +123,11 @@ void	print_f(t_parse *parse)
 		free(tmp);
 	}
 	else
+	{
+		precision_zero(parse, &fraction, &intpart);
 		parse->num = intpart;
+	}
 	list_alloc(parse->num, parse, ft_strlen(parse->num));
 	if (intpart)
 		free(intpart);
 }
-
-/*TODO:
-add zeroes before fraction, based on ((intmax_t_len - 1) - fraction_len)
-*/
