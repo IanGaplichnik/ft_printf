@@ -14,12 +14,12 @@
 #include <limits.h>
 #include <math.h>
 
-void	precision_round(t_parse *parse, char **fraction)
+void	precision_round(t_parse *parse, char **fraction, int i)
 {
-	int		i;
 	char	old;
 
-	i = parse->precision;
+	if (i == -1)
+		i = parse->precision;
 	old = '9';
 	while ((*fraction)[i] == '9' && i >= 0 && old == '9')
 	{
@@ -52,14 +52,11 @@ void	precision_add_f(t_parse *parse, char **fraction)
 		&& (*fraction)[parse->precision] != '\0')
 	{
 		if ((*fraction)[parse->precision] == '9')
-			precision_round(parse, fraction);
+			precision_round(parse, fraction, -1);
 		else if ((*fraction)[parse->precision - 1] != '9')
 			(*fraction)[parse->precision - 1] += 1;
 		else
-		{
-			(*fraction)[parse->precision] = '9';
-			precision_round(parse, fraction);
-		}
+			precision_round(parse, fraction, parse->precision - 1);
 	}
 	(*fraction)[parse->precision] = '\0';
 }
@@ -96,7 +93,7 @@ void	print_f(t_parse *parse)
 	char		*tmp;
 
 	full = va_arg(parse->ap, double);
-	if (full < 0)
+	if (full < 0 || (1 / full == -INFINITY))
 	{
 		full = -full;
 		parse->neg = 1;

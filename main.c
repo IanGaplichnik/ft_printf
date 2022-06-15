@@ -4,9 +4,9 @@
 
 int	main(void)
 {
-	int res = ft_printf("%.8f", 23.375094499);
+	int res = ft_printf("%f", -0.0);
 	printf("res = %d\n", res);
-	res = printf("%.8f", 23.375094499);
+	res = printf("%f", -0.0);
 	printf("res = %d\n", res);
 	return(0);
 }
