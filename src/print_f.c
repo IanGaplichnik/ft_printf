@@ -14,7 +14,7 @@
 #include <limits.h>
 #include <math.h>
 
-void	precision_round(t_parse *parse, char **fraction, int i)
+void	precision_round(t_parse *parse, char **fraction, int i, int *intpart)
 {
 	char	old;
 
@@ -24,6 +24,8 @@ void	precision_round(t_parse *parse, char **fraction, int i)
 	while ((*fraction)[i] == '9' && i >= 0 && old == '9')
 	{
 		(*fraction)[i] = '0';
+		if ((*fraction)[i] == '0' && old == '9' && i == 0)
+			*intpart += 1;
 		if ((*fraction)[i - 1] && (*fraction)[i - 1] != '9')
 		{
 			old = (*fraction)[i - 1];
@@ -33,7 +35,18 @@ void	precision_round(t_parse *parse, char **fraction, int i)
 	}
 }
 
-void	precision_add_f(t_parse *parse, char **fraction)
+void	precision_zero(t_parse *parse, char **fraction, int *intpart)
+{
+	int		i;
+
+	if ((*fraction)[0] == '5' && (*intpart + 1) % 2 == 0) 
+		*intpart += 1;
+	else if ((*fraction)[0] > '5')
+		*intpart += 1;
+	(*fraction)[0] = '\0';
+}
+
+void	precision_add_f(t_parse *parse, char **fraction, int *intpart)
 {
 	char	*tmp;
 	int		left;
@@ -48,47 +61,28 @@ void	precision_add_f(t_parse *parse, char **fraction)
 		ft_strncpy(&(*fraction)[left], tmp, 18 - left);
 		free(tmp);
 	}
-	if (((*fraction)[parse->precision]) >= '5'
-		&& (*fraction)[parse->precision] != '\0')
+	if (parse->precision == 0)
+		precision_zero(parse, fraction, intpart);
+	else
 	{
-		if ((*fraction)[parse->precision] == '9')
-			precision_round(parse, fraction, -1);
-		else if ((*fraction)[parse->precision - 1] != '9')
-			(*fraction)[parse->precision - 1] += 1;
-		else
-			precision_round(parse, fraction, parse->precision - 1);
-	}
-	(*fraction)[parse->precision] = '\0';
-}
-
-void	precision_zero(t_parse *parse, char **fraction, char **intpart)
-{
-	char	old;
-	int		i;
-
-	i = ft_strlen(*intpart) - 1;
-	old = '9';
-	if ((*fraction)[0] >= '5')
-	{
-		old = (*intpart)[i];
-		(*intpart)[i] += 1;
-		while (old == '9' && (*intpart)[i] == '9' && i >= 0)
-			{
-				(*intpart)[i] = '0';
-				if ((*intpart)[i - 1] && (*intpart)[i - 1] != '9')
-				{
-					old = (*intpart)[i - 1];
-					(*intpart)[i - 1] += 1;
-				}
-			}
-			i--;
+		if (((*fraction)[parse->precision]) >= '5' && (*fraction)[parse->precision] != '\0')
+		{
+			if ((*fraction)[parse->precision] == '9')
+				precision_round(parse, fraction, -1, intpart);
+			else if ((*fraction)[parse->precision - 1] != '9')
+				(*fraction)[parse->precision - 1] += 1;
+			else
+				precision_round(parse, fraction, parse->precision - 1, intpart);
+		}
+		(*fraction)[parse->precision] = '\0';
 	}
 }
 
 void	print_f(t_parse *parse)
 {
-	double	full;
-	char		*intpart;
+	long double	full;
+	char		*int_str;
+	int			intpart;
 	char		*fraction;
 	char		*tmp;
 
@@ -98,33 +92,22 @@ void	print_f(t_parse *parse)
 		full = -full;
 		parse->neg = 1;
 	}
-	intpart = ft_itoa_base((int)full, 10, 0);
-	fraction = ft_itoa_base((long long)((full - (int)full) * pow(10, 18)),
-			10, 0);
+	intpart = (int)full;
+	fraction = ft_itoa_base((long long)((full - intpart) * pow(10, 18)),
+			10, 0); //CHANGE POW
 	if (parse->precision == -1)
 		parse->precision = 6;
-	if (parse->neg)
-	{
-		tmp = intpart;
-		intpart = ft_strjoin ("-", intpart);
-		free(tmp);
-	}
-	if (parse->precision != 0)
-	{
-		precision_add_f(parse, &fraction);
-		tmp = parse->num;
-		parse->num = ft_strjoin(intpart, ".");
-		free(tmp);
-		tmp = parse->num;
-		parse->num = ft_strjoin(parse->num, fraction);
-		free(tmp);
-	}
+	precision_add_f(parse, &fraction, &intpart);
+	int_str = ft_itoa_base(intpart, 10, 0);
+	if (parse->precision != 0 || parse->hash)
+		parse->num = ft_strjoin(int_str, ".");
 	else
-	{
-		precision_zero(parse, &fraction, &intpart);
-		parse->num = intpart;
-	}
+		parse->num = int_str;
+	parse->num = ft_strjoin(parse->num, fraction);
+	if (parse->neg)
+		parse->num = ft_strjoin("-", parse->num);
+	else if (parse->plus && !parse->neg)
+		parse->num = ft_strjoin("+", parse->num);
 	list_alloc(parse->num, parse, ft_strlen(parse->num));
-	if (intpart)
-		free(intpart);
+	free(int_str);
 }

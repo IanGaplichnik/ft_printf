@@ -37,8 +37,10 @@ void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 		*num = (unsigned short)va_arg(ap, long long);
 	else if (len == 3 || len == 5)
 		*num = (long long)va_arg(ap, long long);
-	else if (len == 4)
+	else if (len == 4 && (conv == 'd' || conv == 'i'))
 		*num = (long)va_arg(ap, long long);
+	else if (len == 4)
+		*num = (unsigned long)va_arg(ap, long long);
 }
 
 char	*num_to_string(t_parse *parse, intmax_t num, int base)
