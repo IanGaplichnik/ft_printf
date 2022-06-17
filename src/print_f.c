@@ -86,7 +86,16 @@ void	print_f(t_parse *parse)
 	char		*fraction;
 	char		*tmp;
 
-	full = va_arg(parse->ap, double);
+	if (parse->length == 0)
+		full = (double)va_arg(parse->ap, double);
+	else if (parse->length == 1)
+		full = (char)va_arg(parse->ap, double);
+	else if (parse->length == 2)
+		full = (short)va_arg(parse->ap, double);
+	else if (parse->length == 3 || parse->length == 5)
+		full = (long long)va_arg(parse->ap, double);
+	else if (parse->length == 4)
+		full = (long)va_arg(parse->ap, double);
 	if (full < 0 || (1 / full == -INFINITY))
 	{
 		full = -full;

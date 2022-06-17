@@ -52,15 +52,15 @@ char	*num_to_string(t_parse *parse, intmax_t num, int base)
 	else
 		cap = 0;
 	if (parse->length == 0)
-		return (ft_itoa_base((unsigned int)num, base, cap));
+		return (ft_uitoa_base((unsigned int)num, base, cap));
 	if (parse->length == 1)
-		return (ft_itoa_base((unsigned char)num, base, cap));
+		return (ft_uitoa_base((unsigned char)num, base, cap));
 	if (parse->length == 2)
-		return (ft_itoa_base((unsigned short)num, base, cap));
+		return (ft_uitoa_base((unsigned short)num, base, cap));
 	if (parse->length == 3 || parse->length == 5)
-		return (ft_itoa_base((unsigned long long)num, base, cap));
+		return (ft_uitoa_base((unsigned long long)num, base, cap));
 	if (parse->length == 4)
-		return (ft_itoa_base((unsigned long)num, base, cap));
+		return (ft_uitoa_base((unsigned long)num, base, cap));
 	else
 		return (NULL);
 }
