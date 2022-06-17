@@ -40,7 +40,7 @@ void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 	else if (len == 4 && (conv == 'd' || conv == 'i'))
 		*num = (long)va_arg(ap, long long);
 	else if (len == 4)
-		*num = (unsigned long)va_arg(ap, long long);
+		*num = (unsigned long long)va_arg(ap, unsigned long long);
 }
 
 char	*num_to_string(t_parse *parse, intmax_t num, int base)
@@ -60,7 +60,7 @@ char	*num_to_string(t_parse *parse, intmax_t num, int base)
 	if (parse->length == 3 || parse->length == 5)
 		return (ft_uitoa_base((unsigned long long)num, base, cap));
 	if (parse->length == 4)
-		return (ft_uitoa_base((unsigned long)num, base, cap));
+		return (ft_uitoa_base((unsigned long long)num, base, cap));
 	else
 		return (NULL);
 }
@@ -87,7 +87,8 @@ void print_nums(t_parse *parse)
 	if (num_arg < 0)
 	{
 		parse->neg = 1;
-		num_arg = -num_arg;
+		if (parse->conv != 'o' && parse->conv != 'u' && parse->conv != 'x' && parse->conv != 'X')
+			num_arg = -num_arg;
 	}
 	parse->num = num_to_string(parse, num_arg, base);
 	if (!ft_strcmp(parse->num, "-9223372036854775808"))
