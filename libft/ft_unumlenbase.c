@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_numlenbase.c                                    :+:      :+:    :+:   */
+/*   ft_unumlenbase.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igaplich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/16 17:35:54 by igaplich          #+#    #+#             */
-/*   Updated: 2022/05/16 17:36:00 by igaplich         ###   ########.fr       */
+/*   Created: 2022/06/17 14:03:38 by igaplich          #+#    #+#             */
+/*   Updated: 2022/06/17 14:03:39 by igaplich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_numlenbase(long long num, int base)
+size_t	ft_unumlenbase(unsigned long long num, int base)
 {
 	size_t	len;
 

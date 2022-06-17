@@ -92,5 +92,7 @@ t_list	*ft_lstmerge(t_list **dst, t_list **src);
 int		ft_atoi_base(const char *str, int str_base);
 int		get_next_line(const int fd, char **line);
 char	*ft_itoa_base(long long num, int base, int cap);
-size_t	ft_numlenbase(long num, int base);
+size_t	ft_numlenbase(long long num, int base);
+char	*ft_uitoa_base(unsigned long long num, int base, int cap);
+size_t	ft_unumlenbase(unsigned long long num, int base);
 #endif

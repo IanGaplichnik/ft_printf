@@ -52,13 +52,13 @@ void	precision_add_f(t_parse *parse, char **fraction, int *intpart)
 	int		left;
 	char	old;
 
-	left = 18 - ft_strlen(*fraction);
+	left = 19 - ft_strlen(*fraction);
 	if (left > 0)
 	{
 		tmp = *fraction;
-		*fraction = ft_strnew(18);
+		*fraction = ft_strnew(19);
 		ft_memset(*fraction, '0', left);
-		ft_strncpy(&(*fraction)[left], tmp, 18 - left);
+		ft_strncpy(&(*fraction)[left], tmp, 19 - left);
 		free(tmp);
 	}
 	if (parse->precision == 0)
@@ -93,12 +93,12 @@ void	print_f(t_parse *parse)
 		parse->neg = 1;
 	}
 	intpart = (int)full;
-	fraction = ft_itoa_base((long long)((full - intpart) * pow(10, 18)),
+	fraction = ft_uitoa_base((unsigned long long)((full - intpart) * pow(10, 19)),
 			10, 0); //CHANGE POW
 	if (parse->precision == -1)
 		parse->precision = 6;
 	precision_add_f(parse, &fraction, &intpart);
-	int_str = ft_itoa_base(intpart, 10, 0);
+	int_str = ft_uitoa_base(intpart, 10, 0);
 	if (parse->precision != 0 || parse->hash)
 		parse->num = ft_strjoin(int_str, ".");
 	else

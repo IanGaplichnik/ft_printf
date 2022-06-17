@@ -90,7 +90,9 @@ LIB_SRC_FILES=ft_strlen.c \
 	ft_atoi_base.c \
 	get_next_line.c \
 	ft_itoa_base.c \
-	ft_numlenbase.c
+	ft_numlenbase.c \
+	ft_uitoa_base.c \
+	ft_unumlenbase.c
 
 INCLUDES=-I./includes -I./libft
 HEADERS_PATH=./includes/

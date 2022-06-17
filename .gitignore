@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-.a.out.dSYM/
+a.out.dSYM/
 a.out
 main.c
 .DS_Store
