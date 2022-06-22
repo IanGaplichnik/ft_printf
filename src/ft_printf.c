@@ -130,7 +130,7 @@ int	ft_printf(const char *format, ...)
 	va_start(parse->ap, format);
 	while (str[i] != '\0')
 	{
-		if (str[i] == '%' && str[i + 1] != '\0')
+		if (str[i] == '%')
 		{
 			list_alloc(str, parse, i);
 			str += i;

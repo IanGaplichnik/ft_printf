@@ -39,7 +39,7 @@ void	flag_parse(char **str, t_parse *parse)
 
 	flag = NULL;
 	*str += 1;
-	while (ft_strchr(FLAGS, **str))
+	while (**str != '\0' && ft_strchr(FLAGS, **str))
 	{
 		flag = ft_strchr(FLAGS, **str);
 		if (flag != NULL)
@@ -110,12 +110,20 @@ int	percent_parse(char **str, t_parse *parse)
 	int	ret;
 
 	ret = 0;
+
 	flag_parse(str, parse);
-	widprec_parse(str, parse, &parse->width);
-	length_parse(str, parse);
-	if (conv_parse(str, parse) == 0)
-		return (0);
-	// print_struct(parse, "");
-	ret += print_conversion(parse);
+	if (**str != '\0')
+	{
+		widprec_parse(str, parse, &parse->width);
+		length_parse(str, parse);
+		if (conv_parse(str, parse) == 0)
+		{
+			parse_init(parse);
+			return (0);
+		}
+		// print_struct(parse, "");
+		ret += print_conversion(parse);
+	}
+	parse_init(parse);
 	return (ret);
 }

@@ -115,6 +115,5 @@ int	print_conversion(t_parse *parse)
 		print_f(parse);
 	else
 		print_nums(parse);
-	parse_init(parse);
 	return (0);
 }

@@ -64,5 +64,8 @@ void	print_o(t_parse *parse);
 void	print_f(t_parse *parse);
 void	precision_add(t_parse *parse, int *num_len);
 void	lengths_prepare(int *num_len, int *str_len, t_parse *parse);
+void	num_width(t_parse *parse, int *num_len, int *i, int *str_len);
+void	num_no_width(t_parse *parse, int *i);
+void	precision_add_f(t_parse *parse, char **fraction, long *intpart);
 
 #endif

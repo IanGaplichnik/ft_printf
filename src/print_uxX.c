@@ -49,9 +49,9 @@ void	lengths_prepare_ux(int *num_len, int *str_len, t_parse *parse)
 
 void	print_ux(t_parse *parse)
 {
-	int		str_len;
-	int		num_len;
-	int		i;
+	int	str_len;
+	int	num_len;
+	int	i;
 
 	num_len = ft_strlen(parse->num);
 	if (*parse->num == '0')

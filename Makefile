@@ -11,7 +11,8 @@ SRC_FILES=ft_printf.c \
 	num_conversion.c \
 	print_uxX.c \
 	print_o.c \
-	print_f.c
+	print_f.c \
+	precision_f.c
 
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 
