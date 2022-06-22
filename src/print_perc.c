@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unumlenbase.c                                   :+:      :+:    :+:   */
+/*   print_perc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igaplich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/17 14:03:38 by igaplich          #+#    #+#             */
-/*   Updated: 2022/06/17 14:03:39 by igaplich         ###   ########.fr       */
+/*   Created: 2022/06/22 18:23:21 by igaplich          #+#    #+#             */
+/*   Updated: 2022/06/22 18:23:23 by igaplich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/ft_printf.h"
 
-size_t	ft_unumlenbase(unsigned long long num, int base)
+int	print_perc(t_parse *parse)
 {
-	size_t	len;
+	char	*conv;
 
-	len = 1;
-	if (num < 0)
-	{
-		len++;
-		num = -num;
-	}
-	while (num >= (unsigned long long)base)
-	{
-		num /= base;
-		len++;
-	}
-	return (len);
+	conv = ft_strnew(1);
+	conv[0] = '%';
+	if (parse->width && parse->width > 1)
+		print_wid(parse, conv, 1);
+	else
+		list_alloc(conv, parse, 1);
+	parse->cur->ret = ft_strlen(parse->cur->data);
+	free(conv);
+	return (0);
 }

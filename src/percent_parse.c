@@ -89,7 +89,8 @@ void	length_parse(char **str, t_parse *parse)
 		parse->length = 5;
 	if ((parse->length == 1 || parse->length == 3) && str[0][1] && str[0][2])
 		*str += 2;
-	else if ((parse->length == 2 || parse->length == 4 || parse->length == 5) && str[0][1])
+	else if ((parse->length == 2 || parse->length == 4 || parse->length == 5)
+		&& str[0][1])
 		*str += 1;
 }
 
@@ -110,7 +111,6 @@ int	percent_parse(char **str, t_parse *parse)
 	int	ret;
 
 	ret = 0;
-
 	flag_parse(str, parse);
 	if (**str != '\0')
 	{

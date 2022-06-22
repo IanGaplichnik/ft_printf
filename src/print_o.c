@@ -54,19 +54,12 @@ void	print_o(t_parse *parse)
 		num_len = 0;
 	}
 	lengths_prepare_o(&num_len, &str_len, parse);
-	precision_add(parse, &num_len);
 	if (str_len == 0)
 		return ;
+	precision_add(parse, &num_len);
 	list_alloc(NULL, parse, str_len);
 	i = 0;
 	num_width_o(parse, &num_len, &i, &str_len);
-	ft_strcpy(&parse->cur->data[i], parse->num);
-	i += ft_strlen(parse->num);
-	if (i < str_len)
-	{
-		ft_memset(&parse->cur->data[i], ' ', str_len - i);
-		i = str_len;
-	}
-	parse->cur->ret = i;
+	number_and_space(parse, &str_len, &i);
 	free(parse->num);
 }

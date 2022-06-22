@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = gcc
-FLAGS = -c -I ${INC_DIR} #-Wall -Werror -Wextra 
+FLAGS = -c -I ${INC_DIR} -Wall -Werror -Wextra #-fsanitize=address
 
 NAME = libft.a
 

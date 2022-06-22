@@ -17,12 +17,12 @@ void	precision_round(t_parse *parse, char **fraction, int i, long *intpart)
 	char	old;
 
 	old = '9';
-	while ((*fraction)[i] == '9' && i >= 0 && old == '9')
+	while (i >= 0 && (*fraction)[i] == '9' && old == '9')
 	{
 		(*fraction)[i] = '0';
 		if ((*fraction)[i] == '0' && old == '9' && i == 0)
 			*intpart += 1;
-		if ((*fraction)[i - 1] && (*fraction)[i - 1] != '9')
+		if (i >= 1 && (*fraction)[i - 1] != '9')
 		{
 			old = (*fraction)[i - 1];
 			(*fraction)[i - 1] += 1;
@@ -33,9 +33,9 @@ void	precision_round(t_parse *parse, char **fraction, int i, long *intpart)
 
 void	precision_zero(t_parse *parse, char **fraction, long *intpart)
 {
-	int		i;
+	int	i;
 
-	if ((*fraction)[0] == '5' && (*intpart + 1) % 2 == 0) 
+	if ((*fraction)[0] == '5' && (*intpart + 1) % 2 == 0)
 		*intpart += 1;
 	else if ((*fraction)[0] > '5')
 		*intpart += 1;
@@ -61,7 +61,8 @@ void	precision_add_f(t_parse *parse, char **fraction, long *intpart)
 		precision_zero(parse, fraction, intpart);
 	else
 	{
-		if (((*fraction)[parse->precision]) >= '5' && (*fraction)[parse->precision] != '\0')
+		if (((*fraction)[parse->precision]) >= '5'
+			&& (*fraction)[parse->precision] != '\0')
 		{
 			if ((*fraction)[parse->precision] == '9')
 				precision_round(parse, fraction, parse->precision, intpart);

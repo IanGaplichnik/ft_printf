@@ -36,7 +36,8 @@ void	f_conversion(t_parse *parse, long *intpart, char **fraction)
 		parse->neg = 1;
 	}
 	*intpart = (long)full;
-	*fraction = ft_uitoa_base((unsigned long long)((full - *intpart) * pow(10, 19)),
+	*fraction = ft_uitoa_base((unsigned long long)((full - *intpart)
+				* pow(10, 19)),
 			10, 0); //CHANGE POW
 	if (parse->precision == -1)
 		parse->precision = 6;
@@ -69,7 +70,7 @@ void	num_width_f(t_parse *parse, int *num_len, int *i, int *str_len)
 			ft_memset(&parse->cur->data[*i], ' ', *str_len - *num_len);
 			*i += *str_len - *num_len;
 			if (parse->neg || parse->plus || parse->space)
-			*i -= 1;
+				*i -= 1;
 		}
 	}
 	if (parse->neg || parse->plus || parse->space)

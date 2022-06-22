@@ -2,17 +2,21 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=-g #-fsanitize=address #-Wall -Werror -Wextra -Wimplicit
+FLAGS=-g -fsanitize=address #-Wall -Werror -Wextra -Wimplicit
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
-	percent_parse.c \
-	print_str.c \
-	print_d.c \
 	num_conversion.c \
-	print_uxX.c \
-	print_o.c \
+	percent_parse.c \
+	precision_f.c \
+	print_c.c \
+	print_d.c \
 	print_f.c \
-	precision_f.c
+	print_o.c \
+	print_p.c\
+	print_perc.c\
+	print_str.c \
+	print_uxX.c
+
 
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 

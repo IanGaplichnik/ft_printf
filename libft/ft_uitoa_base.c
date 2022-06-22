@@ -15,7 +15,7 @@
 static char	*conv(char *res, unsigned long long num, int base, int len)
 {
 	len -= 1;
-	while (num >= base)
+	while (num >= (unsigned long long)base)
 	{
 		if (num % base < 10)
 			res[len] = '0' + (num % base);

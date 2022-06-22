@@ -45,7 +45,7 @@ void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 
 char	*num_to_string(t_parse *parse, intmax_t num, int base)
 {
-	int cap;
+	int	cap;
 
 	if (parse->conv == 'X')
 		cap = 1;
@@ -67,27 +67,27 @@ char	*num_to_string(t_parse *parse, intmax_t num, int base)
 
 void	print_specifier(t_parse *parse)
 {
-	if (parse->conv == 'd' || parse->conv == 'i') 
+	if (parse->conv == 'd' || parse->conv == 'i')
 		print_di(parse);
 	else if (parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
 		print_ux(parse);
 	else if (parse->conv == 'o')
 		print_o(parse);
-	
 }
 
-void print_nums(t_parse *parse)
+void	print_nums(t_parse *parse)
 {
-	intmax_t num_arg;
-	char *tmp;
-	int base;
+	intmax_t	num_arg;
+	char		*tmp;
+	int			base;
 
 	base = base_selector(parse->conv);
 	arg_conv_receiver(parse->conv, parse->length, parse->ap, &num_arg);
 	if (num_arg < 0)
 	{
 		parse->neg = 1;
-		if (parse->conv != 'o' && parse->conv != 'u' && parse->conv != 'x' && parse->conv != 'X')
+		if (parse->conv != 'o' && parse->conv != 'u'
+			&& parse->conv != 'x' && parse->conv != 'X')
 			num_arg = -num_arg;
 	}
 	parse->num = num_to_string(parse, num_arg, base);

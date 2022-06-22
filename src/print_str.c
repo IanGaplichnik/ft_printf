@@ -34,45 +34,12 @@ int	precision_check(t_parse *parse, char *string)
 	len = ft_strlen(string);
 	if (parse->precision != -1 && parse->precision < len)
 		len = parse->precision;
-	if ((!parse->width || (parse->width && parse->width <= len)) && len)
+	if (!parse->width || (parse->width && parse->width <= len))
 		list_alloc(string, parse, len);
 	if (parse->width && len < parse->width)
 		print_wid(parse, string, len);
 	if (len || parse->width)
 		parse->cur->ret = ft_strlen(parse->cur->data);
-	return (0);
-}
-
-int	print_c(t_parse *parse)
-{
-	char	conv;
-
-	conv = (char)va_arg(parse->ap, int);
-	if (parse->width && parse->width > 1)
-		print_wid(parse, &conv, 1);
-	else
-		list_alloc(&conv, parse, 1);
-	parse->cur->ret = ft_strlen(parse->cur->data);
-	if (conv == 0)
-	{
-		if (parse->width > 1)
-			parse->cur->ret = parse->width;
-		else
-			parse->cur->ret = 1;
-	}
-	return (0);
-}
-
-int	print_perc(t_parse *parse)
-{
-	char	conv;
-
-	conv = '%';
-	if (parse->width && parse->width > 1)
-		print_wid(parse, &conv, 1);
-	else
-		list_alloc(&conv, parse, 1);
-	parse->cur->ret = ft_strlen(parse->cur->data);
 	return (0);
 }
 
@@ -84,21 +51,6 @@ void	print_str(t_parse *parse)
 	if (!string)
 		string = "(null)";
 	precision_check(parse, string);
-}
-
-void	print_p(t_parse *parse)
-{
-	char	*addr;
-	char	*tmp;
-	long	p;
-
-	p = (long)va_arg(parse->ap, void *);
-	addr = ft_itoa_base(p, 16, 0);
-	tmp = addr;
-	addr = ft_strjoin("0x", addr);
-	free(tmp);
-	precision_check(parse, addr);
-	free(addr);
 }
 
 int	print_conversion(t_parse *parse)

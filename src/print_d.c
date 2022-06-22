@@ -13,42 +13,13 @@
 #include "../includes/ft_printf.h"
 #include <limits.h>
 
-void	num_no_width(t_parse *parse, int *i)
-{
-	if (parse->plus && !parse->neg && !parse->zero)
-		parse->cur->data[(*i)++] = '+';
-	else if (parse->neg)
-		parse->cur->data[(*i)++] = '-';
-}
-
-void	num_width(t_parse *parse, int *num_len, int *i, int *str_len)
-{
-	if (*num_len < parse->width && !parse->dash)
-	{
-		if (parse->zero)
-			ft_memset(&parse->cur->data[*i], '0', *str_len - *num_len);
-		else if (!parse->zero)
-			ft_memset(&parse->cur->data[*i], ' ', *str_len - *num_len);
-		*i += *str_len - *num_len;
-		if (parse->neg && parse->zero)
-		{
-			parse->cur->data[0] = '-';
-			parse->neg = 0;
-		}
-		else if (parse->plus && !parse->neg && parse->zero)
-			parse->cur->data[0] = '+';
-	}
-}
-
 void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1 || *num_len > parse->width)
 		parse->zero = 0;
-	if ((parse->neg || parse->plus) && !parse->zero)
-		*num_len += 1;
-	if (!parse->neg && parse->space)
-		*num_len += 1;
 	*str_len = *num_len;
+	if (parse->neg || parse->plus || parse->space)
+		*str_len += 1;
 	if (*str_len < parse->width)
 		*str_len = parse->width;
 	if (*str_len < parse->precision)
@@ -72,6 +43,18 @@ void	precision_add(t_parse *parse, int *num_len)
 	}
 }
 
+void	number_and_space(t_parse *parse, int *str_len, int *i)
+{
+	ft_strcpy(&parse->cur->data[*i], parse->num);
+	*i += ft_strlen(parse->num);
+	if (*i < *str_len)
+	{
+		ft_memset(&parse->cur->data[*i], ' ', *str_len - *i);
+		*i = *str_len;
+	}
+	parse->cur->ret = *i;
+}
+
 void	print_di(t_parse *parse)
 {
 	int		str_len;
@@ -92,17 +75,7 @@ void	print_di(t_parse *parse)
 		return ;
 	list_alloc(NULL, parse, str_len);
 	i = 0;
-	if (parse->space && !parse->neg)
-		parse->cur->data[i++] = ' ';
-	num_width(parse, &num_len, &i, &str_len);
-	num_no_width(parse, &i);
-	ft_strcpy(&parse->cur->data[i], parse->num);
-	i += ft_strlen(parse->num);
-	if (i < str_len)
-	{
-		ft_memset(&parse->cur->data[i], ' ', str_len - i);
-		i = str_len;
-	}
-	parse->cur->ret = i;
+	num_width_f(parse, &num_len, &i, &str_len);
+	number_and_space(parse, &str_len, &i);
 	free(parse->num);
 }

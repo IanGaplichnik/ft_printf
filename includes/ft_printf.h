@@ -67,5 +67,12 @@ void	lengths_prepare(int *num_len, int *str_len, t_parse *parse);
 void	num_width(t_parse *parse, int *num_len, int *i, int *str_len);
 void	num_no_width(t_parse *parse, int *i);
 void	precision_add_f(t_parse *parse, char **fraction, long *intpart);
+void	num_width_f(t_parse *parse, int *num_len, int *i, int *str_len);
+void	lengths_prepare_f(t_parse *parse, long *intpart, int *num_len, int *str_len);
+void	number_and_space(t_parse *parse, int *str_len, int *i);
+void	print_wid(t_parse *parse, char *string, int len);
+int		print_c(t_parse *parse);
+int		print_perc(t_parse *parse);
+void	print_p(t_parse *parse);
 
 #endif

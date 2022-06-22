@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unumlenbase.c                                   :+:      :+:    :+:   */
+/*   print_p.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igaplich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/17 14:03:38 by igaplich          #+#    #+#             */
-/*   Updated: 2022/06/17 14:03:39 by igaplich         ###   ########.fr       */
+/*   Created: 2022/06/22 18:21:25 by igaplich          #+#    #+#             */
+/*   Updated: 2022/06/22 18:21:28 by igaplich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/ft_printf.h"
 
-size_t	ft_unumlenbase(unsigned long long num, int base)
+void	precision_check_p(t_parse *parse, char **addr)
 {
-	size_t	len;
+	int	len;
 
-	len = 1;
-	if (num < 0)
+	len = ft_strlen(*addr);
+}
+
+void	print_p(t_parse *parse)
+{
+	char	*tmp;
+	long	p;
+
+	p = (long)va_arg(parse->ap, void *);
+	parse->num = ft_itoa_base(p, 16, 0);
+	if (p == 0 && parse->precision == 0)
 	{
-		len++;
-		num = -num;
+		list_alloc("0x", parse, 2);
+		free(parse->num);
 	}
-	while (num >= (unsigned long long)base)
-	{
-		num /= base;
-		len++;
-	}
-	return (len);
+	else
+		print_ux(parse);
 }
