@@ -50,6 +50,24 @@ void	flag_parse(char **str, t_parse *parse)
 	free(flag);
 }
 
+void	star_arg(char **str, t_parse *parse, int *param, int option)
+{
+	*param = va_arg(parse->ap, int);
+	if (*param < 0)
+	{
+		if (option)
+		{
+			parse->dash = true;
+			*param *= -1;
+		}
+		else
+			*param = -1;
+	}
+	*str += 1;
+	if (ft_isdigit(**str))
+		widprec_parse(str, parse, &parse->width);
+}
+
 void	widprec_parse(char **str, t_parse *parse, int *param)
 {
 	char	*last_dig;
@@ -65,11 +83,15 @@ void	widprec_parse(char **str, t_parse *parse, int *param)
 		*str = last_dig;
 		free(width);
 	}
+	else if (**str == '*')
+		star_arg(str, parse, param, 1);
 	if (**str == '.')
 	{
 		*str += 1;
 		if (**str >= '0' && **str <= '9')
 			widprec_parse(str, parse, &parse->precision);
+		else if (**str == '*')
+			star_arg(str, parse, &parse->precision, 0);
 		else
 			parse->precision = 0;
 	}
@@ -87,10 +109,10 @@ void	length_parse(char **str, t_parse *parse)
 		parse->length = 4;
 	else if (**str == 'L')
 		parse->length = 5;
-	if ((parse->length == 1 || parse->length == 3) && str[0][1] && str[0][2])
+	if (str[0][1] && str[0][2] && (parse->length == 1 || parse->length == 3))
 		*str += 2;
-	else if ((parse->length == 2 || parse->length == 4 || parse->length == 5)
-		&& str[0][1])
+	else if (str[0][1] && (parse->length == 2 || parse->length == 4
+		|| parse->length == 5))
 		*str += 1;
 }
 

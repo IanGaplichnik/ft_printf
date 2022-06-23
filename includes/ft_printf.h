@@ -74,5 +74,6 @@ void	print_wid(t_parse *parse, char *string, int len);
 int		print_c(t_parse *parse);
 int		print_perc(t_parse *parse);
 void	print_p(t_parse *parse);
+void	widprec_parse(char **str, t_parse *parse, int *param);
 
 #endif

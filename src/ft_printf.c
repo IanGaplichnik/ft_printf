@@ -109,8 +109,10 @@ int	print_test(t_parse *parse)
 		free(tmp2);
 		tmp2 = tmp;
 	}
-	free(tmp);
+	if (tmp)
+		free(tmp);
 	free(parse);
+	// system("leaks a.out");
 	return (ret);
 }
 

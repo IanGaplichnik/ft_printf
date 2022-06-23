@@ -70,7 +70,10 @@ void	print_ux(t_parse *parse)
 	}
 	lengths_prepare_ux(&num_len, &str_len, parse);
 	if (str_len == 0)
+	{
+		free(parse->num);
 		return ;
+	}
 	precision_add(parse, &num_len);
 	list_alloc(NULL, parse, str_len);
 	i = 0;

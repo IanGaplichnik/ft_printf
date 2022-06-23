@@ -2,7 +2,7 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=-g -fsanitize=address #-Wall -Werror -Wextra -Wimplicit
+FLAGS=-g #-fsanitize=address #-Wall -Werror -Wextra -Wimplicit
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	num_conversion.c \

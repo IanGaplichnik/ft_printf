@@ -72,7 +72,10 @@ void	print_di(t_parse *parse)
 	precision_add(parse, &num_len);
 	lengths_prepare(&num_len, &str_len, parse);
 	if (str_len == 0)
+	{
+		free(parse->num);
 		return ;
+	}
 	list_alloc(NULL, parse, str_len);
 	i = 0;
 	num_width_f(parse, &num_len, &i, &str_len);

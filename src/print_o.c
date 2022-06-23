@@ -55,7 +55,10 @@ void	print_o(t_parse *parse)
 	}
 	lengths_prepare_o(&num_len, &str_len, parse);
 	if (str_len == 0)
+	{
+		free(parse->num);
 		return ;
+	}
 	precision_add(parse, &num_len);
 	list_alloc(NULL, parse, str_len);
 	i = 0;
