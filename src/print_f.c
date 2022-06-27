@@ -14,36 +14,38 @@
 #include <limits.h>
 #include <math.h>
 
-int	ft_isinf(long double f)
+static int	ifnan_ifinf(t_parse *parse, long double *full)
 {
-    long double l;
-    l = *((long double*)&f);
-    if (l == 0x7FF00000)
-        return 1;
-    if (l == 0xFF800000)
-        return -1;
-    return 0;
-}
-
-int	f_conversion(t_parse *parse, long *intpart, char **fraction)
-{
-	long double	full;
-
-	if (parse->length == 5)
-		full = (long double)va_arg(parse->ap, long double);
-	else
-		full = (double)va_arg(parse->ap, double);
-	if (full != full)
+	if (*full != *full)
 	{
 		parse->zero = false;
 		parse->precision = -1;
 		precision_check(parse, "nan");
 		return (0);
 	}
-	if (ft_isinf(full) == 1)
-		precision_check(parse, "inf");
-	else if (ft_isinf(full) == -1)
-		precision_check(parse, "-inf");
+	if (*full == INFINITY || *full == -INFINITY)
+	{
+		parse->num = ft_strdup("inf");
+		if (*full == -INFINITY)
+			parse->neg = 1;
+		parse->zero = false;
+		parse->precision = -1;
+		print_di(parse);
+		return (0);
+	}
+	return (1);
+}
+
+static int	f_conversion(t_parse *parse, long *intpart, char **fraction, va_list ap)
+{
+	long double	full;
+
+	if (parse->length == 5)
+		full = (long double)va_arg(ap, long double);
+	else
+		full = (double)va_arg(ap, double);
+	if (!ifnan_ifinf(parse, &full))
+		return (0);
 	if (full < 0 || (1 / full == -INFINITY))
 	{
 		full = -full;
@@ -60,7 +62,8 @@ int	f_conversion(t_parse *parse, long *intpart, char **fraction)
 	return (1);
 }
 
-void	lengths_prepare_f(t_parse *parse, long *intpart, int *num_len, int *str_len)
+static void	lengths_prepare_f(t_parse *parse, long *intpart,
+		int *num_len, int *str_len)
 {
 	if (parse->neg || parse->plus)
 		parse->space = false;
@@ -102,7 +105,26 @@ void	num_width_f(t_parse *parse, int *num_len, int *i, int *str_len)
 	*i = ft_strlen(parse->cur->data);
 }
 
-void	print_f(t_parse *parse)
+static void	number_and_space_f(t_parse *parse, int *i, int *str_len, char *fraction)
+{
+	ft_strcpy(&parse->cur->data[*i], parse->num);
+	*i += ft_strlen(parse->num);
+	if (parse->precision != 0 || parse->hash)
+		parse->cur->data[(*i)++] = '.';
+	if (parse->precision != 0)
+	{
+		ft_strcpy(&parse->cur->data[*i], fraction);
+		*i += ft_strlen(fraction);
+	}
+	if (*i < parse->width)
+	{
+		ft_memset(&parse->cur->data[*i], ' ', *str_len - *i);
+		*i = *str_len;
+	}
+	parse->cur->ret = *i;
+}
+
+void	print_f(t_parse *parse, va_list ap)
 {
 	long	intpart;
 	char	*fraction;
@@ -111,27 +133,13 @@ void	print_f(t_parse *parse)
 	int		i;
 
 	i = 0;
-	if (f_conversion(parse, &intpart, &fraction))
+	if (f_conversion(parse, &intpart, &fraction, ap))
 	{
 		precision_add_f(parse, &fraction, &intpart);
 		parse->num = ft_uitoa_base(intpart, 10, 0);
 		lengths_prepare_f(parse, &intpart, &num_len, &str_len);
 		num_width_f(parse, &num_len, &i, &str_len);
-		ft_strcpy(&parse->cur->data[i], parse->num);
-		i += ft_strlen(parse->num);
-		if (parse->precision != 0 || parse->hash)
-			parse->cur->data[i++] = '.';
-		if (parse->precision != 0)
-		{
-			ft_strcpy(&parse->cur->data[i], fraction);
-			i += ft_strlen(fraction);
-		}
-		if (i < parse->width)
-		{
-			ft_memset(&parse->cur->data[i], ' ', str_len - i);
-			i = str_len;
-		}
-		parse->cur->ret = i;
+		number_and_space_f(parse, &i, &str_len, fraction);
 		free(fraction);
 		free(parse->num);
 	}

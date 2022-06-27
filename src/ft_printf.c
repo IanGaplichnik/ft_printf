@@ -13,7 +13,7 @@
 #include "../includes/ft_printf.h"
 #include <stdio.h>
 
-t_parse	*parse_init(t_parse *parse)
+void	parse_init(t_parse *parse)
 {
 	parse->hash = false;
 	parse->dash = false;
@@ -26,10 +26,9 @@ t_parse	*parse_init(t_parse *parse)
 	parse->conv = 0;
 	parse->neg = 0;
 	parse->num = NULL;
-	return (parse);
 }
 
-void	list_fill(char *str, t_parse *parse, int len)
+static void	list_fill(char *str, t_parse *parse, int len)
 {
 	parse->cur->data = ft_strnew(len + 1);
 	if (str != NULL)
@@ -63,87 +62,23 @@ void	list_alloc(char *str, t_parse *parse, int len)
 	list_fill(str, parse, len);
 }
 
-int	print_reverse(t_parse *parse)
-{
-	int		j = 1;
-	int		ret;
-	t_ret	*tmp;
-
-	ret = 0;
-	tmp = parse->head;
-	while (tmp)
-	{
-		printf("\n%sNODE %d%s\n", RED, j, REG);
-		printf("|%s|", tmp->data);
-		printf("\nNODE LENGTH = %d\n\n", tmp->ret);
-		ret += tmp->ret;
-		tmp = tmp->next;
-		j++;
-	}
-	printf("Return = %d\n", ret);
-	tmp = parse->head;
-	while (tmp)
-	{
-		printf("%s", tmp->data);
-		tmp = tmp->next;
-	}
-	return (ret);
-}
-
-
-int	print_test(t_parse *parse)
-{
-	int		ret;
-	t_ret	*tmp;
-	t_ret	*tmp2;
-
-	ret = 0;
-	tmp = parse->head;
-	tmp2 = parse->head;
-	while (tmp)
-	{
-		ret += tmp->ret;
-		write(1, tmp->data, tmp->ret);
-		free(tmp->data);
-		tmp = tmp->next;
-		free(tmp2);
-		tmp2 = tmp;
-	}
-	if (tmp)
-		free(tmp);
-	free(parse);
-	// system("leaks a.out");
-	return (ret);
-}
-
 int	ft_printf(const char *format, ...)
 {
-	char	*str;
-	t_parse	*parse;
-	int		i;
+	char	*ret_str;
+	int		ret;
+	va_list	ap;
 
 	if (!format)
 		return (-1);
-	i = 0;
-	str = (char *)format;
-	parse = (t_parse *)malloc(sizeof(t_parse));
-	parse->head = NULL;
-	parse_init(parse);
-	va_start(parse->ap, format);
-	while (str[i] != '\0')
+	va_start(ap, format);
+	ret = ft_vasprintf(&ret_str, format, ap);
+	va_end(ap);
+	if (ret < 0)
+		return (-1);
+	if (ret != 0)
 	{
-		if (str[i] == '%')
-		{
-			list_alloc(str, parse, i);
-			str += i;
-			percent_parse(&str, parse);
-			i = 0;
-		}
-		else
-			i++;
+		write(1, ret_str, ret);
+		free(ret_str);
 	}
-	list_alloc(str, parse, i);
-	va_end(parse->ap);
-	return(print_test(parse));
-	// return (print_reverse(parse));
+	return (ret);
 }

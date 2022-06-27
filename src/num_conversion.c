@@ -12,7 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
-int	base_selector(const char c)
+static int	base_selector(const char c)
 {
 	if (c == 'o')
 		return (8);
@@ -21,7 +21,7 @@ int	base_selector(const char c)
 	return (10);
 }
 
-void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
+static void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 {
 	if (len == 0 && (conv == 'd' || conv == 'i'))
 		*num = (int)va_arg(ap, long long);
@@ -43,7 +43,7 @@ void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
 		*num = (unsigned long long)va_arg(ap, unsigned long long);
 }
 
-char	*num_to_string(t_parse *parse, intmax_t num, int base)
+static char	*num_to_string(t_parse *parse, intmax_t num, int base)
 {
 	int	cap;
 
@@ -65,7 +65,7 @@ char	*num_to_string(t_parse *parse, intmax_t num, int base)
 		return (NULL);
 }
 
-void	print_specifier(t_parse *parse)
+static void	print_specifier(t_parse *parse)
 {
 	if (parse->conv == 'd' || parse->conv == 'i')
 		print_di(parse);
@@ -75,14 +75,14 @@ void	print_specifier(t_parse *parse)
 		print_o(parse);
 }
 
-void	print_nums(t_parse *parse)
+void	print_nums(t_parse *parse, va_list ap)
 {
 	intmax_t	num_arg;
 	char		*tmp;
 	int			base;
 
 	base = base_selector(parse->conv);
-	arg_conv_receiver(parse->conv, parse->length, parse->ap, &num_arg);
+	arg_conv_receiver(parse->conv, parse->length, ap, &num_arg);
 	if (num_arg < 0)
 	{
 		parse->neg = 1;

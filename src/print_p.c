@@ -12,19 +12,12 @@
 
 #include "../includes/ft_printf.h"
 
-void	precision_check_p(t_parse *parse, char **addr)
-{
-	int	len;
-
-	len = ft_strlen(*addr);
-}
-
-void	print_p(t_parse *parse)
+void	print_p(t_parse *parse, va_list ap)
 {
 	char	*tmp;
 	long	p;
 
-	p = (long)va_arg(parse->ap, void *);
+	p = (long)va_arg(ap, void *);
 	parse->num = ft_itoa_base(p, 16, 0);
 	if (p == 0 && parse->precision == 0)
 	{

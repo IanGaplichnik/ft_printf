@@ -12,12 +12,12 @@
 
 #include "../includes/ft_printf.h"
 
-int	print_c(t_parse *parse)
+int	print_c(t_parse *parse, va_list ap)
 {
 	char	*letter;
 
 	letter = ft_strnew(1);
-	letter[0] = (char)va_arg(parse->ap, int);
+	letter[0] = (char)va_arg(ap, int);
 	if (parse->width && parse->width > 1)
 		print_wid(parse, letter, 1);
 	else

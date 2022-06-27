@@ -13,7 +13,7 @@
 #include "../includes/ft_printf.h"
 #include <limits.h>
 
-void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
+static void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1 || *num_len > parse->width)
 		parse->zero = 0;

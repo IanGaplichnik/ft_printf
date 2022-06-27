@@ -12,7 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
-void	precision_round(t_parse *parse, char **fraction, int i, long *intpart)
+static void	precision_round(t_parse *parse, char **fraction, int i, long *intpart)
 {
 	char	old;
 
@@ -31,7 +31,7 @@ void	precision_round(t_parse *parse, char **fraction, int i, long *intpart)
 	}
 }
 
-void	precision_zero(t_parse *parse, char **fraction, long *intpart)
+static void	precision_zero(t_parse *parse, char **fraction, long *intpart)
 {
 	int	i;
 

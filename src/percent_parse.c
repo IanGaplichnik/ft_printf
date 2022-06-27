@@ -13,7 +13,7 @@
 #include "../includes/ft_printf.h"
 #include <stdio.h>
 
-void	flag_mark(char flag, t_parse *parse)
+static void	flag_mark(char flag, t_parse *parse)
 {
 	if (flag == '#')
 		parse->hash = true;
@@ -33,7 +33,7 @@ void	flag_mark(char flag, t_parse *parse)
 		parse->space = true;
 }
 
-void	flag_parse(char **str, t_parse *parse)
+static void	flag_parse(char **str, t_parse *parse)
 {
 	char	*flag;
 
@@ -50,54 +50,7 @@ void	flag_parse(char **str, t_parse *parse)
 	free(flag);
 }
 
-void	star_arg(char **str, t_parse *parse, int *param, int option)
-{
-	*param = va_arg(parse->ap, int);
-	if (*param < 0)
-	{
-		if (option)
-		{
-			parse->dash = true;
-			*param *= -1;
-		}
-		else
-			*param = -1;
-	}
-	*str += 1;
-	if (ft_isdigit(**str))
-		widprec_parse(str, parse, &parse->width);
-}
-
-void	widprec_parse(char **str, t_parse *parse, int *param)
-{
-	char	*last_dig;
-	char	*width;
-
-	if (**str >= '0' && **str <= '9')
-	{
-		last_dig = *str;
-		while (*last_dig >= '0' && *last_dig <= '9')
-			last_dig++;
-		width = ft_strsub(*str, 0, (last_dig - *str));
-		*param = ft_atoi(width);
-		*str = last_dig;
-		free(width);
-	}
-	else if (**str == '*')
-		star_arg(str, parse, param, 1);
-	if (**str == '.')
-	{
-		*str += 1;
-		if (**str >= '0' && **str <= '9')
-			widprec_parse(str, parse, &parse->precision);
-		else if (**str == '*')
-			star_arg(str, parse, &parse->precision, 0);
-		else
-			parse->precision = 0;
-	}
-}
-
-void	length_parse(char **str, t_parse *parse)
+static void	length_parse(char **str, t_parse *parse)
 {
 	if (!ft_strncmp(*str, "hh", 2))
 		parse->length = 1;
@@ -116,7 +69,7 @@ void	length_parse(char **str, t_parse *parse)
 		*str += 1;
 }
 
-int	conv_parse(char **str, t_parse *parse)
+static int	conv_parse(char **str, t_parse *parse)
 {
 	if (ft_strchr(CONV, **str))
 	{
@@ -128,24 +81,21 @@ int	conv_parse(char **str, t_parse *parse)
 	return (0);
 }
 
-int	percent_parse(char **str, t_parse *parse)
+int	percent_parse(char **str, t_parse *parse, va_list ap)
 {
-	int	ret;
-
-	ret = 0;
 	flag_parse(str, parse);
 	if (**str != '\0')
 	{
-		widprec_parse(str, parse, &parse->width);
+		width_parse(str, parse, &parse->width, ap);
+		precision_parse(str, parse, &parse->precision, ap);
 		length_parse(str, parse);
 		if (conv_parse(str, parse) == 0)
 		{
 			parse_init(parse);
 			return (0);
 		}
-		// print_struct(parse, "");
-		ret += print_conversion(parse);
+		print_conversion(parse, ap);
 	}
 	parse_init(parse);
-	return (ret);
+	return (1);
 }

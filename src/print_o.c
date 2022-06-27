@@ -12,7 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
-void	num_width_o(t_parse *parse, int *num_len, int *i, int *str_len)
+static void	num_width_o(t_parse *parse, int *num_len, int *i, int *str_len)
 {
 	if (*num_len < parse->width && !parse->dash)
 	{
@@ -26,7 +26,7 @@ void	num_width_o(t_parse *parse, int *num_len, int *i, int *str_len)
 		parse->cur->data[(*i)++] = '0';
 }
 
-void	lengths_prepare_o(int *num_len, int *str_len, t_parse *parse)
+static void	lengths_prepare_o(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
 		parse->zero = 0;

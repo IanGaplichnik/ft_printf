@@ -43,29 +43,29 @@ int	precision_check(t_parse *parse, char *string)
 	return (0);
 }
 
-void	print_str(t_parse *parse)
+static void	print_str(t_parse *parse, va_list ap)
 {
 	char	*string;
 
-	string = va_arg(parse->ap, char *);
+	string = va_arg(ap, char *);
 	if (!string)
 		string = "(null)";
 	precision_check(parse, string);
 }
 
-int	print_conversion(t_parse *parse)
+int	print_conversion(t_parse *parse, va_list ap)
 {
 	if (parse->conv == 's')
-		print_str(parse);
+		print_str(parse, ap);
 	else if (parse->conv == 'c')
-		print_c(parse);
+		print_c(parse, ap);
 	else if (parse->conv == '%')
 		print_perc(parse);
 	else if (parse->conv == 'p')
-		print_p(parse);
+		print_p(parse, ap);
 	else if (parse->conv == 'f')
-		print_f(parse);
+		print_f(parse, ap);
 	else
-		print_nums(parse);
+		print_nums(parse, ap);
 	return (0);
 }
