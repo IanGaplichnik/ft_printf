@@ -79,7 +79,7 @@ static int	conv_parse(char **str, t_parse *parse)
 		return (1);
 	}
 	*str += 1;
-	return (0);
+	return (-1);
 }
 
 int	percent_parse(char **str, t_parse *parse, va_list ap)
@@ -87,15 +87,18 @@ int	percent_parse(char **str, t_parse *parse, va_list ap)
 	flag_parse(str, parse);
 	if (**str != '\0')
 	{
-		width_parse(str, parse, &parse->width, ap);
-		precision_parse(str, parse, &parse->precision, ap);
-		length_parse(str, parse);
-		if (conv_parse(str, parse) == 0)
+		if (width_parse(str, parse, &parse->width, ap) == -1)
+			return (-1);
+		if (**str == '.')
 		{
-			parse_init(parse);
-			return (0);
+			if (precision_parse(str, parse, &parse->precision, ap) == -1)
+				return (-1);
 		}
-		print_conversion(parse, ap);
+		length_parse(str, parse);
+		if (conv_parse(str, parse) == -1)
+			return (-1);
+		if (print_conversion(parse, ap) == -1)
+			return (-1);
 	}
 	parse_init(parse);
 	return (1);

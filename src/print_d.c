@@ -26,7 +26,7 @@ static void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
 		*str_len = parse->precision;
 }
 
-void	precision_add(t_parse *parse, int *num_len)
+int	precision_add(t_parse *parse, int *num_len)
 {
 	char	*tmp;
 	int		i;
@@ -36,11 +36,17 @@ void	precision_add(t_parse *parse, int *num_len)
 	{
 		tmp = parse->num;
 		parse->num = ft_strnew(parse->precision);
+		if (!parse->num)
+		{
+			free (tmp);
+			return (-1);
+		}
 		ft_memset(&parse->num[i], '0', parse->precision - *num_len);
 		ft_strcpy(&parse->num[parse->precision - *num_len + i], tmp);
 		free(tmp);
 		*num_len = parse->precision;
 	}
+	return (1);
 }
 
 void	number_and_space(t_parse *parse, int *str_len, int *i)
@@ -55,30 +61,29 @@ void	number_and_space(t_parse *parse, int *str_len, int *i)
 	parse->cur->ret = *i;
 }
 
-void	print_di(t_parse *parse)
+//%di printing algorithm
+int	print_di(t_parse *parse)
 {
 	int		str_len;
 	int		num_len;
 	int		i;
 
 	if (*parse->num == '0' && parse->precision == 0)
-	{
-		free(parse->num);
-		parse->num = ft_strdup("");
-		num_len = 0;
-	}
-	else
-		num_len = ft_strlen(parse->num);
-	precision_add(parse, &num_len);
+		parse->num[0] = '\0';
+	num_len = ft_strlen(parse->num);
+	if (precision_add(parse, &num_len) == -1)
+		return (-1);
 	lengths_prepare(&num_len, &str_len, parse);
 	if (str_len == 0)
 	{
 		free(parse->num);
-		return ;
+		return (1);
 	}
-	list_alloc(NULL, parse, str_len);
+	if (list_alloc(NULL, parse, str_len) == -1)
+		return (-1);
 	i = 0;
 	num_width_f(parse, &num_len, &i, &str_len);
 	number_and_space(parse, &str_len, &i);
 	free(parse->num);
+	return (1);
 }

@@ -31,6 +31,7 @@ static void	precision_round(char **fraction, int i, long *intpart)
 	}
 }
 
+//Banker's rounding
 static void	precision_zero(char **fraction, long *intpart)
 {
 	if ((*fraction)[0] == '5' && (*intpart + 1) % 2 == 0)
@@ -40,7 +41,24 @@ static void	precision_zero(char **fraction, long *intpart)
 	(*fraction)[0] = '\0';
 }
 
-void	precision_add_f(t_parse *parse, char **fraction, long *intpart)
+//%f fractional part manipulation, if precision is more than zero
+static void	precision_nonzero(char **fraction, t_parse *parse, long *intpart)
+{
+	if (((*fraction)[parse->precision]) >= '5'
+		&& (*fraction)[parse->precision] != '\0')
+	{
+		if ((*fraction)[parse->precision] == '9')
+			precision_round(fraction, parse->precision, intpart);
+		else if ((*fraction)[parse->precision - 1] != '9')
+			(*fraction)[parse->precision - 1] += 1;
+		else
+			precision_round(fraction, parse->precision - 1, intpart);
+	}
+	(*fraction)[parse->precision] = '\0';
+}
+
+//%f Adding zeroes in the beginning of the fraction if needed, doing precision
+int	precision_add_f(t_parse *parse, char **fraction, long *intpart)
 {
 	char	*tmp;
 	int		left;
@@ -50,6 +68,8 @@ void	precision_add_f(t_parse *parse, char **fraction, long *intpart)
 	{
 		tmp = *fraction;
 		*fraction = ft_strnew(19);
+		if (!(*fraction))
+			return (-1);
 		ft_memset(*fraction, '0', left);
 		ft_strncpy(&(*fraction)[left], tmp, 19 - left);
 		free(tmp);
@@ -57,17 +77,6 @@ void	precision_add_f(t_parse *parse, char **fraction, long *intpart)
 	if (parse->precision == 0)
 		precision_zero(fraction, intpart);
 	else
-	{
-		if (((*fraction)[parse->precision]) >= '5'
-			&& (*fraction)[parse->precision] != '\0')
-		{
-			if ((*fraction)[parse->precision] == '9')
-				precision_round(fraction, parse->precision, intpart);
-			else if ((*fraction)[parse->precision - 1] != '9')
-				(*fraction)[parse->precision - 1] += 1;
-			else
-				precision_round(fraction, parse->precision - 1, intpart);
-		}
-		(*fraction)[parse->precision] = '\0';
-	}
+		precision_nonzero(fraction, parse, intpart);
+	return (1);
 }

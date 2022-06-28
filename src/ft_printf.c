@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-#include <stdio.h>
 
+//Initializing elements of the struct t_parse *parse
 void	parse_init(t_parse *parse)
 {
 	parse->hash = false;
@@ -28,18 +28,25 @@ void	parse_init(t_parse *parse)
 	parse->num = NULL;
 }
 
+/*If string is present, allocate string of LEN bytes and copy STR in
+the DATA element in the CURRENT node of the list,
+else, allocate string of LEN bytes in the DATA element in the CURRENT node
+and leave it as is*/
 static int	list_fill(char *str, t_parse *parse, int len)
 {
 	parse->cur->data = ft_strnew(len + 1);
 	if (!parse->cur->data)
-		return (clean_printf(parse));
+		return (-1);
 	if (str != NULL)
 	{
 		ft_strncpy(parse->cur->data, str, len);
 		parse->cur->ret = ft_strlen(parse->cur->data);
 	}
+	return (1);
 }
 
+/*Creating a new node in the end of the list and calling
+a function to allocate string inside created node*/
 int	list_alloc(char *str, t_parse *parse, int len)
 {
 	t_ret	*new;
@@ -69,6 +76,7 @@ int	list_alloc(char *str, t_parse *parse, int len)
 	return (1);
 }
 
+//Implementation of printf C function
 int	ft_printf(const char *format, ...)
 {
 	char	*ret_str;

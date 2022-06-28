@@ -12,17 +12,21 @@
 
 #include "../includes/ft_printf.h"
 
-void	print_p(t_parse *parse, va_list ap)
+int	print_p(t_parse *parse, va_list ap)
 {
 	long	p;
 
 	p = (long)va_arg(ap, void *);
 	parse->num = ft_itoa_base(p, 16, 0);
+	if (!parse->num)
+		return (-1);
 	if (p == 0 && parse->precision == 0)
 	{
-		list_alloc("0x", parse, 2);
+		if (list_alloc("0x", parse, 2) == -1)
+			return (-1);
 		free(parse->num);
 	}
-	else
-		print_ux(parse);
+	else if (print_ux(parse) == -1)
+		return (-1);
+	return (1);
 }

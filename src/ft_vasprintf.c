@@ -15,13 +15,14 @@
 int	clean_printf(t_parse *parse)
 {
 	t_ret	*tmp;
-	
+
 	tmp = parse->head;
 	parse->cur = parse->head;
 	while (parse->cur)
 	{
 		parse->cur = parse->cur->next;
-		free(tmp->data);
+		if (tmp->data)
+			free(tmp->data);
 		free(tmp);
 		tmp = parse->cur;
 	}
@@ -50,6 +51,8 @@ static int	copy_to_res(t_parse *parse, char **ret, size_t *str_len)
 
 	i = 0;
 	*ret = ft_strnew(*str_len);
+	if (!(*ret))
+		return (-1);
 	tmp = parse->head;
 	while (parse->cur)
 	{
@@ -60,6 +63,7 @@ static int	copy_to_res(t_parse *parse, char **ret, size_t *str_len)
 		free(tmp);
 		tmp = parse->cur;
 	}
+	return (1);
 }
 
 static int	str_build(t_parse *parse, char **ret)
@@ -75,7 +79,10 @@ static int	str_build(t_parse *parse, char **ret)
 	}
 	parse->cur = parse->head;
 	if (str_len != 0)
-		copy_to_res(parse, ret, &str_len);
+	{
+		if (copy_to_res(parse, ret, &str_len) == -1)
+			return (-1);
+	}
 	if (parse->num)
 		free(parse->num);
 	free(parse);

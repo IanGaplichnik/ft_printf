@@ -12,16 +12,28 @@
 
 #include "../includes/ft_printf.h"
 
+//%p printing algo
 int	print_perc(t_parse *parse)
 {
 	char	*conv;
 
 	conv = ft_strnew(1);
+	if (!conv)
+		return (-1);
 	conv[0] = '%';
 	if (parse->width && parse->width > 1)
-		print_wid(parse, conv, 1);
-	else
-		list_alloc(conv, parse, 1);
+	{
+		if (print_wid(parse, conv, 1) == -1)
+		{
+			free(conv);
+			return (-1);
+		}
+	}
+	else if (list_alloc(conv, parse, 1) == -1)
+	{
+		free(conv);
+		return (-1);
+	}
 	parse->cur->ret = ft_strlen(parse->cur->data);
 	free(conv);
 	return (0);

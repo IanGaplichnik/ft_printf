@@ -21,7 +21,8 @@ static int	base_selector(const char c)
 	return (10);
 }
 
-static void	arg_conv_receiver(const char conv, int len, va_list ap, intmax_t *num)
+static void	arg_conv_receiver(const char conv, int len,
+		va_list ap, intmax_t *num)
 {
 	if (len == 0 && (conv == 'd' || conv == 'i'))
 		*num = (int)va_arg(ap, long long);
@@ -65,17 +66,21 @@ static char	*num_to_string(t_parse *parse, intmax_t num, int base)
 		return (NULL);
 }
 
-static void	print_specifier(t_parse *parse)
+static int	print_specifier(t_parse *parse)
 {
+	int	ret;
+
+	ret = -1;
 	if (parse->conv == 'd' || parse->conv == 'i')
-		print_di(parse);
+		ret = print_di(parse);
 	else if (parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
-		print_ux(parse);
+		ret = print_ux(parse);
 	else if (parse->conv == 'o')
-		print_o(parse);
+		ret = print_o(parse);
+	return (ret);
 }
 
-void	print_nums(t_parse *parse, va_list ap)
+int	print_nums(t_parse *parse, va_list ap)
 {
 	intmax_t	num_arg;
 	char		*tmp;
@@ -91,11 +96,17 @@ void	print_nums(t_parse *parse, va_list ap)
 			num_arg = -num_arg;
 	}
 	parse->num = num_to_string(parse, num_arg, base);
+	if (!parse->num)
+		return (-1);
 	if (!ft_strcmp(parse->num, "-9223372036854775808"))
 	{
 		tmp = parse->num;
 		parse->num = ft_strdup("9223372036854775808");
 		free(tmp);
+		if (!parse->num)
+			return (-1);
 	}
-	print_specifier(parse);
+	if (print_specifier(parse) == -1)
+		return (-1);
+	return (1);
 }

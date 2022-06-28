@@ -13,6 +13,7 @@ SRC_FILES=ft_printf.c \
 	print_c.c \
 	print_d.c \
 	print_f.c \
+	print_f2.c \
 	print_o.c \
 	print_p.c\
 	print_perc.c\

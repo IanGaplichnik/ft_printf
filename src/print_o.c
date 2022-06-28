@@ -39,7 +39,7 @@ static void	lengths_prepare_o(int *num_len, int *str_len, t_parse *parse)
 		*str_len = parse->precision;
 }
 
-void	print_o(t_parse *parse)
+int	print_o(t_parse *parse)
 {
 	int	str_len;
 	int	num_len;
@@ -51,18 +51,23 @@ void	print_o(t_parse *parse)
 	{
 		free(parse->num);
 		parse->num = ft_strdup("");
+		if (!parse->num)
+			return (-1);
 		num_len = 0;
 	}
 	lengths_prepare_o(&num_len, &str_len, parse);
 	if (str_len == 0)
 	{
 		free(parse->num);
-		return ;
+		return (1);
 	}
-	precision_add(parse, &num_len);
-	list_alloc(NULL, parse, str_len);
+	if (precision_add(parse, &num_len) == -1)
+		return (-1);
+	if (list_alloc(NULL, parse, str_len) == -1)
+		return (-1);
 	i = 0;
 	num_width_o(parse, &num_len, &i, &str_len);
 	number_and_space(parse, &str_len, &i);
 	free(parse->num);
+	return (1);
 }

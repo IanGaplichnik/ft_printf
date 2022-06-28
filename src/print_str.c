@@ -12,9 +12,11 @@
 
 #include "../includes/ft_printf.h"
 
-void	print_wid(t_parse *parse, char *string, int len)
+//Setting the string with width for %scp conversions
+int	print_wid(t_parse *parse, char *string, int len)
 {
-	list_alloc(NULL, parse, parse->width);
+	if (list_alloc(NULL, parse, parse->width) == -1)
+		return (-1);
 	if (!parse->dash)
 	{
 		if (parse->zero)
@@ -25,6 +27,7 @@ void	print_wid(t_parse *parse, char *string, int len)
 	ft_strncat(parse->cur->data, string, len);
 	if (parse->dash)
 		ft_memset(&parse->cur->data[len], ' ', parse->width - len);
+	return (1);
 }
 
 int	precision_check(t_parse *parse, char *string)
@@ -35,37 +38,56 @@ int	precision_check(t_parse *parse, char *string)
 	if (parse->precision != -1 && parse->precision < len)
 		len = parse->precision;
 	if (!parse->width || (parse->width && parse->width <= len))
-		list_alloc(string, parse, len);
-	if (parse->width && len < parse->width)
-		print_wid(parse, string, len);
+	{
+		if (list_alloc(string, parse, len) == -1)
+			return (-1);
+	}
+	else if (parse->width && len < parse->width)
+	{
+		if (print_wid(parse, string, len) == -1)
+			return (-1);
+	}
 	if (len || parse->width)
 		parse->cur->ret = ft_strlen(parse->cur->data);
-	return (0);
+	return (1);
 }
 
-static void	print_str(t_parse *parse, va_list ap)
+//&s printing algorithm
+static int	print_str(t_parse *parse, va_list ap)
 {
 	char	*string;
 
 	string = va_arg(ap, char *);
 	if (!string)
-		string = "(null)";
-	precision_check(parse, string);
+	{
+		string = ft_strdup("(null)");
+		if (!string)
+			return (-1);
+	}
+	if (precision_check(parse, string) == -1)
+		return (-1);
+	if (ft_strstr(string, "(null)"))
+		free(string);
+	return (1);
 }
 
+//Calling appropriate function depending on conversion specifier
 int	print_conversion(t_parse *parse, va_list ap)
 {
+	int	ret;
+
+	ret = -1;
 	if (parse->conv == 's')
-		print_str(parse, ap);
+		ret = print_str(parse, ap);
 	else if (parse->conv == 'c')
-		print_c(parse, ap);
+		ret = print_c(parse, ap);
 	else if (parse->conv == '%')
-		print_perc(parse);
+		ret = print_perc(parse);
 	else if (parse->conv == 'p')
-		print_p(parse, ap);
+		ret = print_p(parse, ap);
 	else if (parse->conv == 'f')
-		print_f(parse, ap);
+		ret = print_f(parse, ap);
 	else
-		print_nums(parse, ap);
-	return (0);
+		ret = print_nums(parse, ap);
+	return (ret);
 }

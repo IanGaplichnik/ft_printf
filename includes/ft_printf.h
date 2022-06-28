@@ -18,7 +18,7 @@
 # include "../libft/libft.h"
 # include <stdarg.h>
 # include <stdbool.h>
-# include <limits.h>
+# include <math.h>
 
 //DELETEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 # include <stdio.h>
@@ -55,23 +55,24 @@ int 	ft_vasprintf(char **ret, const char *format, va_list ap);
 void	parse_init(t_parse *parse);
 int		list_alloc(char *str, t_parse *parse, int len);
 int		percent_parse(char **str, t_parse *parse, va_list ap);
-void	print_di(t_parse *parse);
-void	print_ux(t_parse *parse);
-void	print_o(t_parse *parse);
+int		print_di(t_parse *parse);
+int		print_ux(t_parse *parse);
+int		print_o(t_parse *parse);
 int		print_conversion(t_parse *parse, va_list ap);
-void	print_wid(t_parse *parse, char *string, int len);
+int		print_wid(t_parse *parse, char *string, int len);
 void	num_width_f(t_parse *parse, int *num_len, int *i, int *str_len);
-void	precision_add_f(t_parse *parse, char **fraction, long *intpart);
+int		precision_add_f(t_parse *parse, char **fraction, long *intpart);
 int		precision_check(t_parse *parse, char *string);
 int		print_c(t_parse *parse, va_list ap);
-void	precision_add(t_parse *parse, int *num_len);
+int		precision_add(t_parse *parse, int *num_len);
 void	number_and_space(t_parse *parse, int *str_len, int *i);
 int		print_perc(t_parse *parse);
-void	print_p(t_parse *parse, va_list ap);
-void	print_f(t_parse *parse, va_list ap);
-void	print_nums(t_parse *parse, va_list ap);
-void	width_parse(char **str, t_parse *parse, int *param, va_list ap);
-void	precision_parse(char **str, t_parse *parse, int *param, va_list ap);
+int		print_p(t_parse *parse, va_list ap);
+int		print_f(t_parse *parse, va_list ap);
+int		print_nums(t_parse *parse, va_list ap);
+int		width_parse(char **str, t_parse *parse, int *param, va_list ap);
+int		precision_parse(char **str, t_parse *parse, int *param, va_list ap);
 int		clean_printf(t_parse *parse);
+int		print_fn(t_parse *parse, long *intpart, char **fraction);
 
 #endif
