@@ -28,9 +28,11 @@ void	parse_init(t_parse *parse)
 	parse->num = NULL;
 }
 
-static void	list_fill(char *str, t_parse *parse, int len)
+static int	list_fill(char *str, t_parse *parse, int len)
 {
 	parse->cur->data = ft_strnew(len + 1);
+	if (!parse->cur->data)
+		return (clean_printf(parse));
 	if (str != NULL)
 	{
 		ft_strncpy(parse->cur->data, str, len);
@@ -38,13 +40,16 @@ static void	list_fill(char *str, t_parse *parse, int len)
 	}
 }
 
-void	list_alloc(char *str, t_parse *parse, int len)
+int	list_alloc(char *str, t_parse *parse, int len)
 {
 	t_ret	*new;
 
 	if (len == 0)
-		return ;
+		return (1);
 	new = (t_ret *)malloc(sizeof(t_ret));
+	if (!new)
+		return (-1);
+	new->data = NULL;
 	new->next = NULL;
 	new->ret = 0;
 	if (!parse->head)
@@ -59,7 +64,9 @@ void	list_alloc(char *str, t_parse *parse, int len)
 		parse->cur->next = new;
 		parse->cur = parse->cur->next;
 	}
-	list_fill(str, parse, len);
+	if (list_fill(str, parse, len) == -1)
+		return (-1);
+	return (1);
 }
 
 int	ft_printf(const char *format, ...)
@@ -70,12 +77,17 @@ int	ft_printf(const char *format, ...)
 
 	if (!format)
 		return (-1);
+	ret_str = NULL;
 	va_start(ap, format);
 	ret = ft_vasprintf(&ret_str, format, ap);
 	va_end(ap);
 	if (ret < 0)
+	{
+		if (ret_str)
+			free(ret_str);
 		return (-1);
-	if (ret != 0)
+	}
+	if (ret > 0)
 	{
 		write(1, ret_str, ret);
 		free(ret_str);

@@ -42,12 +42,13 @@ static void	flag_parse(char **str, t_parse *parse)
 	while (**str != '\0' && ft_strchr(FLAGS, **str))
 	{
 		flag = ft_strchr(FLAGS, **str);
-		if (flag != NULL)
+		if (flag)
 			flag_mark(*flag, parse);
 		flag = NULL;
 		*str += 1;
 	}
-	free(flag);
+	if (flag)
+		free(flag);
 }
 
 static void	length_parse(char **str, t_parse *parse)

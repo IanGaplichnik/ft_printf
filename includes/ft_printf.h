@@ -40,11 +40,11 @@ typedef struct s_parse
 	bool	zero;			//0
 	bool	plus;			//+ 
 	bool	space;			//' '
+	bool	neg;
 	int		width;			//num
 	int		precision;		//.num
 	int		length;			//hh, h, ll, l, L
 	char	conv;			//%cspdiouxX
-	int		neg;
 	char	*num;
 	struct s_ret	*head;	//head of linked list
 	struct s_ret	*cur;	//current node of linked list
@@ -53,7 +53,7 @@ typedef struct s_parse
 int		ft_printf(const char *format, ...);
 int 	ft_vasprintf(char **ret, const char *format, va_list ap);
 void	parse_init(t_parse *parse);
-void	list_alloc(char *str, t_parse *parse, int len);
+int		list_alloc(char *str, t_parse *parse, int len);
 int		percent_parse(char **str, t_parse *parse, va_list ap);
 void	print_di(t_parse *parse);
 void	print_ux(t_parse *parse);
@@ -72,5 +72,6 @@ void	print_f(t_parse *parse, va_list ap);
 void	print_nums(t_parse *parse, va_list ap);
 void	width_parse(char **str, t_parse *parse, int *param, va_list ap);
 void	precision_parse(char **str, t_parse *parse, int *param, va_list ap);
+int		clean_printf(t_parse *parse);
 
 #endif

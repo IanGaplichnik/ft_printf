@@ -12,7 +12,26 @@
 
 #include "../includes/ft_printf.h"
 
-static char	*ft_lencpy(char *dst, const char *src, size_t len)
+int	clean_printf(t_parse *parse)
+{
+	t_ret	*tmp;
+	
+	tmp = parse->head;
+	parse->cur = parse->head;
+	while (parse->cur)
+	{
+		parse->cur = parse->cur->next;
+		free(tmp->data);
+		free(tmp);
+		tmp = parse->cur;
+	}
+	if (parse->num)
+		free(parse->num);
+	free(parse);
+	return (-1);
+}
+
+static void	ft_lencpy(char *dst, const char *src, size_t len)
 {
 	size_t	i;
 
@@ -22,7 +41,6 @@ static char	*ft_lencpy(char *dst, const char *src, size_t len)
 		dst[i] = src[i];
 		i++;
 	}
-	return (dst);
 }
 
 static int	copy_to_res(t_parse *parse, char **ret, size_t *str_len)
@@ -58,6 +76,8 @@ static int	str_build(t_parse *parse, char **ret)
 	parse->cur = parse->head;
 	if (str_len != 0)
 		copy_to_res(parse, ret, &str_len);
+	if (parse->num)
+		free(parse->num);
 	free(parse);
 	return (str_len);
 }
@@ -65,26 +85,36 @@ static int	str_build(t_parse *parse, char **ret)
 int	ft_vasprintf(char **ret, const char *format, va_list ap)
 {
 	int		i;
+	int		return_value;
 	char	*str;
 	t_parse	*parse;
 
+	str = (char *)format;
 	parse = (t_parse *)malloc(sizeof(t_parse));
+	if (!parse)
+		return (-1);
 	parse_init(parse);
 	parse->head = NULL;
-	str = (char *)format;
+	parse->cur = NULL;
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '%')
 		{
-			list_alloc(str, parse, i);
+			if (list_alloc(str, parse, i) == -1)
+				return (clean_printf(parse));
 			str += i;
-			percent_parse(&str, parse, ap);
+			if (percent_parse(&str, parse, ap) == -1)
+				return (clean_printf(parse));
 			i = 0;
 		}
 		else
 			i++;
 	}
-	list_alloc(str, parse, i);
-	return (str_build(parse, ret));
+	if (list_alloc(str, parse, i) == -1)
+		return (clean_printf(parse));
+	return_value = str_build(parse, ret);
+	if (return_value < 0)
+		return (clean_printf(parse));
+	return (return_value);
 }

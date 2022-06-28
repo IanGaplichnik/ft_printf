@@ -14,7 +14,6 @@
 
 void	print_p(t_parse *parse, va_list ap)
 {
-	char	*tmp;
 	long	p;
 
 	p = (long)va_arg(ap, void *);
