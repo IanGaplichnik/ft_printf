@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//Handling width for %uxX conversions
 static void	num_width_ux(t_parse *parse, int *num_len, int *i, int *str_len)
 {
 	if (*num_len < parse->width && !parse->dash)
@@ -36,6 +37,7 @@ static void	num_width_ux(t_parse *parse, int *num_len, int *i, int *str_len)
 	*i = ft_strlen(parse->cur->data);
 }
 
+//Calculating length of resulting string and number
 static void	lengths_prepare_ux(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
@@ -53,6 +55,7 @@ static void	lengths_prepare_ux(int *num_len, int *str_len, t_parse *parse)
 	}
 }
 
+//%uxX printing algorithm
 int	print_ux(t_parse *parse)
 {
 	int	str_len;

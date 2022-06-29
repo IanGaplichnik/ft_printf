@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//Rounding fraction part of double, adding +1 to int part if needed
 static void	precision_round(char **fraction, int i, long *intpart)
 {
 	char	old;
@@ -31,7 +32,7 @@ static void	precision_round(char **fraction, int i, long *intpart)
 	}
 }
 
-//Banker's rounding
+//Banker's rounding for zero precision
 static void	precision_zero(char **fraction, long *intpart)
 {
 	if ((*fraction)[0] == '5' && (*intpart + 1) % 2 == 0)
@@ -69,7 +70,10 @@ int	precision_add_f(t_parse *parse, char **fraction, long *intpart)
 		tmp = *fraction;
 		*fraction = ft_strnew(19);
 		if (!(*fraction))
+		{
+			free(tmp);
 			return (-1);
+		}
 		ft_memset(*fraction, '0', left);
 		ft_strncpy(&(*fraction)[left], tmp, 19 - left);
 		free(tmp);

@@ -30,6 +30,7 @@ int	print_wid(t_parse *parse, char *string, int len)
 	return (1);
 }
 
+//%s precision handling
 int	precision_check(t_parse *parse, char *string)
 {
 	int	len;
@@ -52,7 +53,7 @@ int	precision_check(t_parse *parse, char *string)
 	return (1);
 }
 
-//&s printing algorithm
+//%s printing algorithm
 static int	print_str(t_parse *parse, va_list ap)
 {
 	char	*string;
@@ -68,6 +69,28 @@ static int	print_str(t_parse *parse, va_list ap)
 		return (-1);
 	if (ft_strstr(string, "(null)"))
 		free(string);
+	return (1);
+}
+
+int	print_n(t_parse *parse, va_list ap)
+{
+	int	value;
+	int	*variable;
+
+	value = 0;
+	parse->cur = parse->head;
+	while (parse->cur)
+	{
+		value += parse->cur->ret;
+		parse->cur = parse->cur->next;
+	}
+	parse->cur = parse->head;
+	while (parse->cur->next)
+		parse->cur = parse->cur->next;
+	variable = va_arg(ap, void *);
+	if (variable == NULL)
+		return (-1);
+	*variable = value;
 	return (1);
 }
 
@@ -87,6 +110,8 @@ int	print_conversion(t_parse *parse, va_list ap)
 		ret = print_p(parse, ap);
 	else if (parse->conv == 'f')
 		ret = print_f(parse, ap);
+	else if (parse->conv == 'n')
+		ret = print_n(parse, ap);
 	else
 		ret = print_nums(parse, ap);
 	return (ret);

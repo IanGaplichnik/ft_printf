@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//Freeing struct and linked list in the end of execution or in case of error
 int	clean_printf(t_parse *parse)
 {
 	t_ret	*tmp;
@@ -32,93 +33,54 @@ int	clean_printf(t_parse *parse)
 	return (-1);
 }
 
-static void	ft_lencpy(char *dst, const char *src, size_t len)
+//Allocating a struct and linked list
+int	alloc_init(t_parse **parse, char **str, const char *format)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < len)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-}
-
-static int	copy_to_res(t_parse *parse, char **ret, size_t *str_len)
-{
-	t_ret	*tmp;
-	int		i;
-
-	i = 0;
-	*ret = ft_strnew(*str_len);
-	if (!(*ret))
+	*str = (char *)format;
+	*parse = (t_parse *)malloc(sizeof(t_parse));
+	if (!(*parse))
 		return (-1);
-	tmp = parse->head;
-	while (parse->cur)
-	{
-		ft_lencpy(&(*ret)[i], parse->cur->data, parse->cur->ret);
-		i += parse->cur->ret;
-		parse->cur = parse->cur->next;
-		free(tmp->data);
-		free(tmp);
-		tmp = parse->cur;
-	}
+	parse_init(*parse);
+	(*parse)->head = NULL;
+	(*parse)->cur = NULL;
 	return (1);
 }
 
-static int	str_build(t_parse *parse, char **ret)
+//Main parsing algorithm reading FORMAT string
+int	parser(t_parse *parse, char *str, va_list ap)
 {
-	size_t	str_len;
+	int	i;
 
-	parse->cur = parse->head;
-	str_len = 0;
-	while (parse->cur)
-	{
-		str_len += parse->cur->ret;
-		parse->cur = parse->cur->next;
-	}
-	parse->cur = parse->head;
-	if (str_len != 0)
-	{
-		if (copy_to_res(parse, ret, &str_len) == -1)
-			return (-1);
-	}
-	if (parse->num)
-		free(parse->num);
-	free(parse);
-	return (str_len);
-}
-
-int	ft_vasprintf(char **ret, const char *format, va_list ap)
-{
-	int		i;
-	int		return_value;
-	char	*str;
-	t_parse	*parse;
-
-	str = (char *)format;
-	parse = (t_parse *)malloc(sizeof(t_parse));
-	if (!parse)
-		return (-1);
-	parse_init(parse);
-	parse->head = NULL;
-	parse->cur = NULL;
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '%')
 		{
 			if (list_alloc(str, parse, i) == -1)
-				return (clean_printf(parse));
+				return (-1);
 			str += i;
 			if (percent_parse(&str, parse, ap) == -1)
-				return (clean_printf(parse));
+				return (-1);
 			i = 0;
 		}
 		else
 			i++;
 	}
 	if (list_alloc(str, parse, i) == -1)
+		return (-1);
+	return (1);
+}
+
+//Implementation of vasprintf function
+int	ft_vasprintf(char **ret, const char *format, va_list ap)
+{
+	int		return_value;
+	char	*str;
+	t_parse	*parse;
+
+	if (alloc_init(&parse, &str, format) == -1)
+		return (clean_printf(parse));
+	if (parser(parse, str, ap) == -1)
 		return (clean_printf(parse));
 	return_value = str_build(parse, ret);
 	if (return_value < 0)

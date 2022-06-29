@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-#include <stdio.h>
 
+//Marking parsed flags in the struct
 static void	flag_mark(char flag, t_parse *parse)
 {
 	if (flag == '#')
@@ -33,6 +33,7 @@ static void	flag_mark(char flag, t_parse *parse)
 		parse->space = true;
 }
 
+//Parsing flags
 static void	flag_parse(char **str, t_parse *parse)
 {
 	char	*flag;
@@ -51,6 +52,7 @@ static void	flag_parse(char **str, t_parse *parse)
 		free(flag);
 }
 
+//Parsing length
 static void	length_parse(char **str, t_parse *parse)
 {
 	if (!ft_strncmp(*str, "hh", 2))
@@ -70,6 +72,7 @@ static void	length_parse(char **str, t_parse *parse)
 		*str += 1;
 }
 
+//Parsing conversion specifier
 static int	conv_parse(char **str, t_parse *parse)
 {
 	if (ft_strchr(CONV, **str))
@@ -82,6 +85,7 @@ static int	conv_parse(char **str, t_parse *parse)
 	return (-1);
 }
 
+//Parsing algorithm if percent sign is met
 int	percent_parse(char **str, t_parse *parse, va_list ap)
 {
 	flag_parse(str, parse);

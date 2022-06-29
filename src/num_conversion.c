@@ -12,15 +12,22 @@
 
 #include "../includes/ft_printf.h"
 
-static int	base_selector(const char c)
+//Selecting base of number for different conversions
+static int	base_selector(t_parse *parse, const char c)
 {
 	if (c == 'o')
 		return (8);
 	if (c == 'x' || c == 'X')
 		return (16);
+	if (c == 'b')
+	{
+		parse->conv = 'd';
+		return (2);
+	}
 	return (10);
 }
 
+//Receiving an argument for different number conversions (except %f)
 static void	arg_conv_receiver(const char conv, int len,
 		va_list ap, intmax_t *num)
 {
@@ -44,6 +51,7 @@ static void	arg_conv_receiver(const char conv, int len,
 		*num = (unsigned long long)va_arg(ap, unsigned long long);
 }
 
+//Converting received argument to a string
 static char	*num_to_string(t_parse *parse, intmax_t num, int base)
 {
 	int	cap;
@@ -66,13 +74,14 @@ static char	*num_to_string(t_parse *parse, intmax_t num, int base)
 		return (NULL);
 }
 
-static int	print_specifier(t_parse *parse)
+//Selector function to print %diouxXb
+static int	print_specifier(t_parse *parse, int base)
 {
 	int	ret;
 
 	ret = -1;
 	if (parse->conv == 'd' || parse->conv == 'i')
-		ret = print_di(parse);
+		ret = print_di(parse, base);
 	else if (parse->conv == 'u' || parse->conv == 'x' || parse->conv == 'X')
 		ret = print_ux(parse);
 	else if (parse->conv == 'o')
@@ -80,21 +89,27 @@ static int	print_specifier(t_parse *parse)
 	return (ret);
 }
 
+void	invert_negative(t_parse *parse, intmax_t *num_arg)
+{
+	if (*num_arg < 0)
+	{
+		parse->neg = 1;
+		if (parse->conv != 'o' && parse->conv != 'u'
+			&& parse->conv != 'x' && parse->conv != 'X')
+			*num_arg *= -1;
+	}
+}
+
+//Main algorithm to print numbers
 int	print_nums(t_parse *parse, va_list ap)
 {
 	intmax_t	num_arg;
 	char		*tmp;
 	int			base;
 
-	base = base_selector(parse->conv);
+	base = base_selector(parse, parse->conv);
 	arg_conv_receiver(parse->conv, parse->length, ap, &num_arg);
-	if (num_arg < 0)
-	{
-		parse->neg = 1;
-		if (parse->conv != 'o' && parse->conv != 'u'
-			&& parse->conv != 'x' && parse->conv != 'X')
-			num_arg = -num_arg;
-	}
+	invert_negative(parse, &num_arg);
 	parse->num = num_to_string(parse, num_arg, base);
 	if (!parse->num)
 		return (-1);
@@ -106,7 +121,7 @@ int	print_nums(t_parse *parse, va_list ap)
 		if (!parse->num)
 			return (-1);
 	}
-	if (print_specifier(parse) == -1)
+	if (print_specifier(parse, base) == -1)
 		return (-1);
 	return (1);
 }

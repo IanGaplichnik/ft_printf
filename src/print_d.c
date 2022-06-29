@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-#include <limits.h>
 
 static void	lengths_prepare(int *num_len, int *str_len, t_parse *parse)
 {
@@ -49,6 +48,7 @@ int	precision_add(t_parse *parse, int *num_len)
 	return (1);
 }
 
+//Copying number and adding spaces after if required by precision
 void	number_and_space(t_parse *parse, int *str_len, int *i)
 {
 	ft_strcpy(&parse->cur->data[*i], parse->num);
@@ -61,8 +61,16 @@ void	number_and_space(t_parse *parse, int *str_len, int *i)
 	parse->cur->ret = *i;
 }
 
+//Increasing precision, until it prints the whole byte
+static void	b_print_length(t_parse *parse, int *num_len)
+{
+	parse->precision = *num_len;
+	while (parse->precision % 8 != 0)
+		parse->precision += 1;
+}
+
 //%di printing algorithm
-int	print_di(t_parse *parse)
+int	print_di(t_parse *parse, int base)
 {
 	int		str_len;
 	int		num_len;
@@ -71,6 +79,8 @@ int	print_di(t_parse *parse)
 	if (*parse->num == '0' && parse->precision == 0)
 		parse->num[0] = '\0';
 	num_len = ft_strlen(parse->num);
+	if (base == 2)
+		b_print_length(parse, &num_len);
 	if (precision_add(parse, &num_len) == -1)
 		return (-1);
 	lengths_prepare(&num_len, &str_len, parse);

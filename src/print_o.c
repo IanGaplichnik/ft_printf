@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//%o width handling
 static void	num_width_o(t_parse *parse, int *num_len, int *i, int *str_len)
 {
 	if (*num_len < parse->width && !parse->dash)
@@ -26,6 +27,7 @@ static void	num_width_o(t_parse *parse, int *num_len, int *i, int *str_len)
 		parse->cur->data[(*i)++] = '0';
 }
 
+//Calculating length of resulting string and number
 static void	lengths_prepare_o(int *num_len, int *str_len, t_parse *parse)
 {
 	if (parse->precision != -1)
@@ -39,22 +41,17 @@ static void	lengths_prepare_o(int *num_len, int *str_len, t_parse *parse)
 		*str_len = parse->precision;
 }
 
+//%o printing algorithm
 int	print_o(t_parse *parse)
 {
 	int	str_len;
 	int	num_len;
 	int	i;
 
-	num_len = ft_strlen(parse->num);
 	if ((*parse->num == '0' && parse->precision == 0)
 		|| (*parse->num == '0' && parse->hash))
-	{
-		free(parse->num);
-		parse->num = ft_strdup("");
-		if (!parse->num)
-			return (-1);
-		num_len = 0;
-	}
+		parse->num[0] = '\0';
+	num_len = ft_strlen(parse->num);
 	lengths_prepare_o(&num_len, &str_len, parse);
 	if (str_len == 0)
 	{

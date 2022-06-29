@@ -13,49 +13,44 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# define CONV "%cspfdiouxX"
+# define CONV "%bncspfdiouxX"
 # define FLAGS "#-0+ "
 # include "../libft/libft.h"
 # include <stdarg.h>
 # include <stdbool.h>
 # include <math.h>
 
-//DELETEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-# include <stdio.h>
-# define RED "\033[0;31m" 
-# define REG "\033[0m"
-//DELETEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
 typedef struct s_ret
 {
-	char	*data;
-	unsigned int		ret;
+	char			*data;
+	unsigned int	ret;
 	struct s_ret	*next;
 }	t_ret;
 
 typedef struct s_parse
 {
-	bool	hash;			//#
-	bool	dash;			//-
-	bool	zero;			//0
-	bool	plus;			//+ 
-	bool	space;			//' '
-	bool	neg;
-	int		width;			//num
-	int		precision;		//.num
-	int		length;			//hh, h, ll, l, L
-	char	conv;			//%cspdiouxX
-	char	*num;
+	bool			hash;			//#
+	bool			dash;			//-
+	bool			zero;			//0
+	bool			plus;			//+ 
+	bool			space;			//' '
+	bool			neg;
+	int				width;			//num
+	int				precision;		//.num
+	int				length;			//hh, h, ll, l, L
+	char			conv;			//%cspdiouxX
+	char			*num;
 	struct s_ret	*head;	//head of linked list
 	struct s_ret	*cur;	//current node of linked list
 }	t_parse;
 
 int		ft_printf(const char *format, ...);
-int 	ft_vasprintf(char **ret, const char *format, va_list ap);
+int		ft_vasprintf(char **ret, const char *format, va_list ap);
+int		ft_asprintf(char **str, const char *format, ...);
 void	parse_init(t_parse *parse);
 int		list_alloc(char *str, t_parse *parse, int len);
 int		percent_parse(char **str, t_parse *parse, va_list ap);
-int		print_di(t_parse *parse);
+int		print_di(t_parse *parse, int base);
 int		print_ux(t_parse *parse);
 int		print_o(t_parse *parse);
 int		print_conversion(t_parse *parse, va_list ap);
@@ -74,5 +69,6 @@ int		width_parse(char **str, t_parse *parse, int *param, va_list ap);
 int		precision_parse(char **str, t_parse *parse, int *param, va_list ap);
 int		clean_printf(t_parse *parse);
 int		print_fn(t_parse *parse, long *intpart, char **fraction);
+int		str_build(t_parse *parse, char **ret);
 
 #endif

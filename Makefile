@@ -2,7 +2,7 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS=-g -Wall  -Wextra -Wimplicit #-fsanitize=address -Werror
+FLAGS= -Wall -Wextra -Werror
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	ft_vasprintf.c \
@@ -18,7 +18,8 @@ SRC_FILES=ft_printf.c \
 	print_p.c\
 	print_perc.c\
 	print_str.c \
-	print_uxX.c 
+	print_uxX.c \
+	build_result.c
 
 SRC=$(addprefix $(SRC_PATH), $(SRC_FILES))
 

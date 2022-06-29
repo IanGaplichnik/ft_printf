@@ -37,7 +37,7 @@ static void	c_null(char *letter, t_parse *parse)
 	}
 }
 
-//%c  printing algorithm beginning
+//%c printing algorithm beginning
 int	print_c(t_parse *parse, va_list ap)
 {
 	char	*letter;

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
-#include <math.h>
 
 //algorithm if %f is a NaN or inf/-inf
 static int	ifnan_ifinf(t_parse *parse, long double *full)
@@ -32,20 +31,32 @@ static int	ifnan_ifinf(t_parse *parse, long double *full)
 			parse->neg = 1;
 		parse->zero = false;
 		parse->precision = -1;
-		if (print_di(parse) == -1)
+		if (print_di(parse, 10) == -1)
 			return (-1);
 		return (0);
 	}
 	return (1);
 }
 
+/*Setting default precision to 6, if no precision is present
+in FORMAT string, else, limiting to the max supported precision 18*/
+static void	f_precision_adjust(t_parse *parse)
+{
+	if (parse->precision == -1)
+		parse->precision = 6;
+	else if (parse->precision > 18)
+		parse->precision = 18;
+}
+
 //separating %f fraction and int part, checking if it is a number
 static int	f_conversion(t_parse *parse, long *intpart,
 		char **fraction, va_list ap)
 {
-	long double	full;
-	int			ret;
+	long double			full;
+	int					ret;
+	unsigned long long	multiplier;
 
+	multiplier = 10000000000000000000UL;
 	if (parse->length == 5)
 		full = (long double)va_arg(ap, long double);
 	else
@@ -60,14 +71,10 @@ static int	f_conversion(t_parse *parse, long *intpart,
 	}
 	*intpart = (long)full;
 	*fraction = ft_uitoa_base((unsigned long long)((full - *intpart)
-				* pow(10, 19)),
-			10, 0); //CHANGE POW
-	if (!fraction)
+				* multiplier), 10, 0);
+	if (!(*fraction))
 		return (-1);
-	if (parse->precision == -1)
-		parse->precision = 6;
-	else if (parse->precision > 18)
-		parse->precision = 18;
+	f_precision_adjust(parse);
 	return (1);
 }
 

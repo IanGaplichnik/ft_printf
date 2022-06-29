@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//%p printing algorithm
 int	print_p(t_parse *parse, va_list ap)
 {
 	long	p;

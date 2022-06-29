@@ -12,6 +12,7 @@
 
 #include "../includes/ft_printf.h"
 
+//Getting STAR argument for width
 static int	starwidth_arg(char **str, t_parse *parse, int *param, va_list ap)
 {
 	*param = va_arg(ap, int);
@@ -29,6 +30,7 @@ static int	starwidth_arg(char **str, t_parse *parse, int *param, va_list ap)
 	return (1);
 }
 
+//Getting the STAR argument for precision
 static int	starprec_arg(char **str, t_parse *parse, int *param, va_list ap)
 {
 	*param = va_arg(ap, int);
@@ -43,6 +45,7 @@ static int	starprec_arg(char **str, t_parse *parse, int *param, va_list ap)
 	return (1);
 }
 
+//Parsing precision, if there's any
 int	precision_parse(char **str, t_parse *parse, int *param, va_list ap)
 {
 	char	*precision;
@@ -71,6 +74,7 @@ int	precision_parse(char **str, t_parse *parse, int *param, va_list ap)
 	return (1);
 }
 
+//Parsing width, if there's any
 int	width_parse(char **str, t_parse *parse, int *param, va_list ap)
 {
 	char	*last_dig;

@@ -97,8 +97,28 @@ int	ft_printf(const char *format, ...)
 	}
 	if (ret > 0)
 	{
-		write(1, ret_str, ret);
+		write(1, ret_str, (size_t)ret);
 		free(ret_str);
+	}
+	return (ret);
+}
+
+//Implementation of asprintf C function
+int	ft_asprintf(char **str, const char *format, ...)
+{
+	int		ret;
+	va_list	ap;
+
+	if (!format)
+		return (-1);
+	va_start(ap, format);
+	ret = ft_vasprintf(str, format, ap);
+	va_end(ap);
+	if (ret < 0)
+	{
+		if (*str)
+			free(*str);
+		return (-1);
 	}
 	return (ret);
 }
