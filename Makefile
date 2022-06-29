@@ -2,7 +2,7 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS= -Wall -Wextra -Werror
+FLAGS= -Wall -Wextra -Werror -O3
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	ft_vasprintf.c \

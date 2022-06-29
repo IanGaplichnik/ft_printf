@@ -33,7 +33,7 @@ int	clean_printf(t_parse *parse)
 	return (-1);
 }
 
-//Allocating a struct and linked list
+//Allocating a struct and linked list inside of that struct
 int	alloc_init(t_parse **parse, char **str, const char *format)
 {
 	*str = (char *)format;

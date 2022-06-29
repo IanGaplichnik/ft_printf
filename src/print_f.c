@@ -22,12 +22,12 @@ static int	ifnan_ifinf(t_parse *parse, long double *full)
 		precision_check(parse, "nan");
 		return (0);
 	}
-	if (*full == INFINITY || *full == -INFINITY)
+	if (*full == 1.0 / 0.0 || *full == -1.0 / 0.0)
 	{
 		parse->num = ft_strdup("inf");
 		if (!parse->num)
 			return (-1);
-		if (*full == -INFINITY)
+		if (*full == -1.0 / 0.0)
 			parse->neg = 1;
 		parse->zero = false;
 		parse->precision = -1;
@@ -64,7 +64,7 @@ static int	f_conversion(t_parse *parse, long *intpart,
 	ret = ifnan_ifinf(parse, &full);
 	if (ret == -1 || ret == 0)
 		return (ret);
-	if (full < 0 || (1 / full == -INFINITY))
+	if (full < 0 || (1 / full == -1.0 / 0.0))
 	{
 		full = -full;
 		parse->neg = 1;

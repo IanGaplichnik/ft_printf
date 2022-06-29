@@ -18,7 +18,6 @@
 # include "../libft/libft.h"
 # include <stdarg.h>
 # include <stdbool.h>
-# include <math.h>
 
 typedef struct s_ret
 {
