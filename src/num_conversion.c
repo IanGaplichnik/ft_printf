@@ -22,6 +22,13 @@ static int	base_selector(t_parse *parse, const char c)
 	if (c == 'b')
 	{
 		parse->conv = 'd';
+		parse->width = 0;
+		parse->precision = -1;
+		parse->zero = false;
+		parse->dash = false;
+		parse->hash = false;
+		parse->plus = false;
+		parse->space = false;
 		return (2);
 	}
 	return (10);
@@ -49,6 +56,13 @@ static void	arg_conv_receiver(const char conv, int len,
 		*num = (long)va_arg(ap, long long);
 	else if (len == 4)
 		*num = (unsigned long long)va_arg(ap, unsigned long long);
+	if (*num < 0)
+	{
+		parse->neg = 1;
+		if (parse->conv != 'o' && parse->conv != 'u'
+			&& parse->conv != 'x' && parse->conv != 'X')
+			*num *= -1;
+	}
 }
 
 //Converting received argument to a string
@@ -89,17 +103,6 @@ static int	print_specifier(t_parse *parse, int base)
 	return (ret);
 }
 
-void	invert_negative(t_parse *parse, intmax_t *num_arg)
-{
-	if (*num_arg < 0)
-	{
-		parse->neg = 1;
-		if (parse->conv != 'o' && parse->conv != 'u'
-			&& parse->conv != 'x' && parse->conv != 'X')
-			*num_arg *= -1;
-	}
-}
-
 //Main algorithm to print numbers
 int	print_nums(t_parse *parse, va_list ap)
 {
@@ -109,7 +112,6 @@ int	print_nums(t_parse *parse, va_list ap)
 
 	base = base_selector(parse, parse->conv);
 	arg_conv_receiver(parse->conv, parse->length, ap, &num_arg);
-	invert_negative(parse, &num_arg);
 	parse->num = num_to_string(parse, num_arg, base);
 	if (!parse->num)
 		return (-1);

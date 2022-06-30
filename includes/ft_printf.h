@@ -19,6 +19,8 @@
 # include <stdarg.h>
 # include <stdbool.h>
 
+/*linked list inside of t_parse struct
+*data is a string of ret length*/
 typedef struct s_ret
 {
 	char			*data;
@@ -26,21 +28,26 @@ typedef struct s_ret
 	struct s_ret	*next;
 }	t_ret;
 
+/*t_parse is a structure, containing parsed flags, width, precision,
+length modifier, conversion specifier and a linked list, containing parts
+of the return string. Additionally, for numeric values num string holds
+an absolute value of a number converted to a string, and neg marks
+if that number is negative*/
 typedef struct s_parse
 {
-	bool			hash;			//#
-	bool			dash;			//-
-	bool			zero;			//0
-	bool			plus;			//+ 
-	bool			space;			//' '
+	bool			hash;
+	bool			dash;
+	bool			zero;
+	bool			plus;
+	bool			space;
 	bool			neg;
-	int				width;			//num
-	int				precision;		//.num
-	int				length;			//hh, h, ll, l, L
-	char			conv;			//%cspdiouxX
+	int				width;
+	int				precision;
+	int				length;
+	char			conv;
 	char			*num;
-	struct s_ret	*head;	//head of linked list
-	struct s_ret	*cur;	//current node of linked list
+	struct s_ret	*head;
+	struct s_ret	*cur;
 }	t_parse;
 
 int		ft_printf(const char *format, ...);
