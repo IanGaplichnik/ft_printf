@@ -18,7 +18,9 @@ _|Hello | -> |&nbsp;&nbsp;World| -> |, this is an example|_
   
 After that, a string, which length is the same as sum of lengths of all strings of the list is allocated, content of the list is copied into the string
 and outputed to the standard output with a  
-```write(1, string, length_of_the_string)```
+```write(1, string, length_of_the_string)```  
+And the resulting output will be:  
+Hello &nbsp;&nbsp;World, this is an example  
 
 ```ft_asprintf(char **str, const char *format, ...)```
 Has the same functionality as _ft_printf_, however, instead of printing the resulting string to the standard output, sufficient memory is allocated for the _**str_ and string is copied there.
