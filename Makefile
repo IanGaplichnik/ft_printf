@@ -2,7 +2,7 @@ CC=gcc
 
 NAME=libftprintf.a 
 
-FLAGS= -Wall -Wextra -Werror -O3
+FLAGS= -Wall -Wextra -Werror
 SRC_PATH=./src/
 SRC_FILES=ft_printf.c \
 	ft_vasprintf.c \
@@ -112,7 +112,6 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIB_OBJ) $(HEADERS) 
 	@ar rc $(NAME) $(OBJ) $(LIB_OBJ)
 	@ranlib $(NAME)
-	@gcc $(FLAGS) main.c -L. libftprintf.a
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir $(OBJ_PATH) 2>/dev/null || echo "" > /dev/null

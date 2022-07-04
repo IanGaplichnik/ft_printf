@@ -48,7 +48,7 @@ static int	copy_to_res(t_parse *parse, char **ret, size_t *str_len)
 	return (1);
 }
 
-/*Calculating length of resulting string calling functions to
+/*Calculating length of resulting string, calling functions to
 copy content to the resulting string RET*/
 int	str_build(t_parse *parse, char **ret)
 {

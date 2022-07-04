@@ -35,26 +35,25 @@ static int	base_selector(t_parse *parse, const char c)
 }
 
 //Receiving an argument for different number conversions (except %f)
-static void	arg_conv_receiver(const char conv, int len,
-		va_list ap, intmax_t *num)
+static void	arg_conv_receiver(t_parse *parse, va_list ap, intmax_t *num)
 {
-	if (len == 0 && (conv == 'd' || conv == 'i'))
+	if (parse->length == 0 && (parse->conv == 'd' || parse->conv == 'i'))
 		*num = (int)va_arg(ap, long long);
-	else if (len == 0)
+	else if (parse->length == 0)
 		*num = (unsigned int)va_arg(ap, long long);
-	else if (len == 1 && (conv == 'd' || conv == 'i'))
+	else if (parse->length == 1 && (parse->conv == 'd' || parse->conv == 'i'))
 		*num = (char)va_arg(ap, long long);
-	else if (len == 1)
+	else if (parse->length == 1)
 		*num = (unsigned char)va_arg(ap, long long);
-	else if (len == 2 && (conv == 'd' || conv == 'i'))
+	else if (parse->length == 2 && (parse->conv == 'd' || parse->conv == 'i'))
 		*num = (short)va_arg(ap, long long);
-	else if (len == 2)
+	else if (parse->length == 2)
 		*num = (unsigned short)va_arg(ap, long long);
-	else if (len == 3 || len == 5)
+	else if (parse->length == 3 || parse->length == 5)
 		*num = (long long)va_arg(ap, long long);
-	else if (len == 4 && (conv == 'd' || conv == 'i'))
+	else if (parse->length == 4 && (parse->conv == 'd' || parse->conv == 'i'))
 		*num = (long)va_arg(ap, long long);
-	else if (len == 4)
+	else if (parse->length == 4)
 		*num = (unsigned long long)va_arg(ap, unsigned long long);
 	if (*num < 0)
 	{
@@ -111,7 +110,7 @@ int	print_nums(t_parse *parse, va_list ap)
 	int			base;
 
 	base = base_selector(parse, parse->conv);
-	arg_conv_receiver(parse->conv, parse->length, ap, &num_arg);
+	arg_conv_receiver(parse, ap, &num_arg);
 	parse->num = num_to_string(parse, num_arg, base);
 	if (!parse->num)
 		return (-1);

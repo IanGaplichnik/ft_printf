@@ -90,17 +90,13 @@ SRC = ft_strlen.c \
 all: $(NAME)
 
 $(NAME):
-	@echo "compiling libft"
 	@$(CC) $(FLAGS) $(SRC)
 	@ar rcs $(NAME) $(SRC2)
 
 clean:
-	@echo "Deleting libft object files"
 	@/bin/rm -f $(SRC2)
 
 fclean: clean
-	@echo "Deleting libft object files and library files"
 	@/bin/rm -f $(NAME)
 
 re: fclean all
-	@echo "Recompiling libft"
